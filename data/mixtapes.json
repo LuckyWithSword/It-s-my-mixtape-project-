@@ -1,0 +1,65 @@
+{
+  "summer-98": {
+    "id": "summer-98",
+    "name": "Summer Dreams 1998",
+    "message": "Made with love for sunny afternoon drives and nostalgic daydreaming. Hope this brings a smile to your day.",
+    "creatorName": "Alex",
+    "customization": {
+      "color": "sunset-amber",
+      "pattern": "retro-stripes",
+      "labelStyle": "marker",
+      "labelColor": "#fef3c7",
+      "stickers": [
+        {
+          "id": "st-1",
+          "type": "mix-vol-1",
+          "xPercent": 12,
+          "yPercent": 20,
+          "rotationDeg": -6
+        },
+        {
+          "id": "st-2",
+          "type": "heart",
+          "xPercent": 82,
+          "yPercent": 18,
+          "rotationDeg": 12
+        },
+        {
+          "id": "st-3",
+          "type": "side-a",
+          "xPercent": 16,
+          "yPercent": 72,
+          "rotationDeg": -4
+        }
+      ],
+      "screwsColor": "gold"
+    },
+    "songs": [
+      {
+        "id": "s1",
+        "youtubeId": "jfKfPfyJRdk",
+        "title": "lofi hip hop radio - beats to relax/study to",
+        "artist": "Lofi Girl",
+        "thumbnailUrl": "https://img.youtube.com/vi/jfKfPfyJRdk/hqdefault.jpg",
+        "position": 1
+      },
+      {
+        "id": "s2",
+        "youtubeId": "5qap5aO4i9A",
+        "title": "beats to sleep/chill to",
+        "artist": "Lofi Girl",
+        "thumbnailUrl": "https://img.youtube.com/vi/5qap5aO4i9A/hqdefault.jpg",
+        "position": 2
+      },
+      {
+        "id": "s3",
+        "youtubeId": "gT5j_b5kZ_w",
+        "title": "Awake",
+        "artist": "Tycho",
+        "thumbnailUrl": "https://img.youtube.com/vi/gT5j_b5kZ_w/hqdefault.jpg",
+        "position": 3
+      }
+    ],
+    "createdAt": "2026-09-17T05:28:56.502Z"
+  }
+}

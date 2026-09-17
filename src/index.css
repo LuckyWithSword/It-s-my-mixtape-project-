@@ -1,0 +1,35 @@
+@import "tailwindcss";
+
+@layer utilities {
+  .font-handwriting {
+    font-family: 'Caveat', cursive;
+  }
+  .font-marker {
+    font-family: 'Permanent Marker', cursive;
+  }
+  .font-mono-retro {
+    font-family: 'Space Mono', monospace;
+  }
+  .font-lcd {
+    font-family: 'VT323', monospace;
+  }
+}
+
+@keyframes spin-spool {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spool-slow {
+  animation: spin-spool 3.8s linear infinite;
+  will-change: transform;
+}
+
+.animate-spool-fast {
+  animation: spin-spool 1.8s linear infinite;
+  will-change: transform;
+}

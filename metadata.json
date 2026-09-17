@@ -1,0 +1,6 @@
+{
+  "name": "Digital Mixtape",
+  "description": "Create and share personalized retro cassette mixtapes with YouTube music playback.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

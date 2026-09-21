@@ -24,6 +24,7 @@ import {
 interface CreateWizardProps {
   onCancel: () => void;
   onFinish: (mixtape: Mixtape) => Promise<void>;
+  initialMixtape?: Mixtape | null;
 }
 
 type WizardStep = 'details' | 'customize' | 'songs' | 'preview';
@@ -40,13 +41,14 @@ const DEFAULT_CUSTOMIZATION: CassetteCustomization = {
   screwsColor: 'silver'
 };
 
-export const CreateWizard: React.FC<CreateWizardProps> = ({ onCancel, onFinish }) => {
+export const CreateWizard: React.FC<CreateWizardProps> = ({ onCancel, onFinish, initialMixtape }) => {
+  const isEditing = !!initialMixtape;
   const [currentStep, setCurrentStep] = useState<WizardStep>('details');
-  const [name, setName] = useState<string>('Mixtape');
-  const [creatorName, setCreatorName] = useState<string>('');
-  const [message, setMessage] = useState<string>('Recorded with love. Put your headphones on and enjoy.');
-  const [customization, setCustomization] = useState<CassetteCustomization>(DEFAULT_CUSTOMIZATION);
-  const [songs, setSongs] = useState<Song[]>([]);
+  const [name, setName] = useState<string>(initialMixtape?.name || 'Mixtape');
+  const [creatorName, setCreatorName] = useState<string>(initialMixtape?.creatorName || '');
+  const [message, setMessage] = useState<string>(initialMixtape?.message || 'Recorded with love. Put your headphones on and enjoy.');
+  const [customization, setCustomization] = useState<CassetteCustomization>(initialMixtape?.customization || DEFAULT_CUSTOMIZATION);
+  const [songs, setSongs] = useState<Song[]>(initialMixtape?.songs || []);
 
   // Preview Playback State
   const [currentSongIndex, setCurrentSongIndex] = useState<number>(0);
@@ -131,15 +133,17 @@ export const CreateWizard: React.FC<CreateWizardProps> = ({ onCancel, onFinish }
     setIsSaving(true);
     setErrorMsg(null);
 
-    const slug = Math.random().toString(36).substring(2, 8);
+    const targetId = initialMixtape?.id || Math.random().toString(36).substring(2, 8);
     const newMixtape: Mixtape = {
-      id: slug,
+      ...initialMixtape,
+      id: targetId,
       name: name.trim() || 'Untitled Mixtape',
       creatorName: creatorName.trim() || undefined,
       message: message.trim() || undefined,
       customization,
       songs,
-      createdAt: new Date().toISOString()
+      createdAt: initialMixtape?.createdAt || new Date().toISOString(),
+      updatedAt: new Date().toISOString()
     };
 
     try {
@@ -167,7 +171,7 @@ export const CreateWizard: React.FC<CreateWizardProps> = ({ onCancel, onFinish }
         </button>
 
         <span className="text-[10px] sm:text-xs font-mono-retro font-bold uppercase tracking-wider text-amber-800 bg-amber-100/90 px-2 sm:px-3 py-0.5 sm:py-1 rounded-full border border-amber-200">
-          Mixtape Studio
+          {isEditing ? 'Editing Mixtape' : 'Mixtape Studio'}
         </span>
       </div>
 
@@ -453,12 +457,12 @@ export const CreateWizard: React.FC<CreateWizardProps> = ({ onCancel, onFinish }
               {isSaving ? (
                 <>
                   <Loader2 className="w-4 h-4 animate-spin" />
-                  <span>Recording Mixtape...</span>
+                  <span>{isEditing ? 'Saving Changes...' : 'Recording Mixtape...'}</span>
                 </>
               ) : (
                 <>
                   <CheckCircle2 className="w-4 h-4" />
-                  <span>Create & Share Mixtape</span>
+                  <span>{isEditing ? 'Save Changes' : 'Create & Share Mixtape'}</span>
                 </>
               )}
             </button>

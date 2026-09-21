@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Mixtape } from '../types';
 import { CassetteTape } from './CassetteTape';
 import { Copy, Check, ExternalLink, Play, Share2, PlusCircle, Sparkles } from 'lucide-react';
+import { getPublicShareUrl } from '../utils/url';
 
 interface ShareSuccessViewProps {
   mixtape: Mixtape;
@@ -16,10 +17,9 @@ export const ShareSuccessView: React.FC<ShareSuccessViewProps> = ({
 }) => {
   const [copied, setCopied] = useState(false);
 
-  // Generate shareable link
-  const origin = window.location.origin;
-  // We support both standard route /tape/slug and hash #tape/slug for bulletproof preview / iframe compatibility
-  const shareUrl = `${origin}/tape/${mixtape.id}`;
+  // Generate canonical public share link (/m/:shareId)
+  const shareKey = mixtape.shareId || mixtape.share_id || mixtape.id;
+  const shareUrl = getPublicShareUrl(shareKey);
 
   const handleCopy = async () => {
     try {

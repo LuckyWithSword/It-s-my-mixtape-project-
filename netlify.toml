@@ -1,0 +1,9 @@
+[build]
+  publish = "dist"
+  command = "npm run build"
+
+# SPA Fallback rule: Direct navigation to any path routes to index.html with 200
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

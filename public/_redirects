@@ -1,0 +1,4 @@
+# Netlify SPA redirect rules
+# Ensures direct navigation to routes like /account, /dashboard, /create, /edit/:id, /profile, /sso-callback, /m/:shareId
+# are routed through index.html instead of returning 404.
+/*    /index.html   200

@@ -11,12 +11,14 @@ interface ListenerViewProps {
   mixtape: Mixtape;
   onMakeYourOwn: () => void;
   onGoHome?: () => void;
+  onEditTape?: (tape: Mixtape) => void;
 }
 
 export const ListenerView: React.FC<ListenerViewProps> = ({
   mixtape,
   onMakeYourOwn,
-  onGoHome
+  onGoHome,
+  onEditTape
 }) => {
   const [currentSongIndex, setCurrentSongIndex] = useState<number>(0);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
@@ -93,6 +95,17 @@ export const ListenerView: React.FC<ListenerViewProps> = ({
         )}
 
         <div className="flex items-center gap-1.5">
+          {onEditTape && (
+            <button
+              type="button"
+              id="listener-edit-tape-btn"
+              onClick={() => onEditTape(mixtape)}
+              className="flex items-center gap-1 text-[10px] sm:text-xs font-mono-retro text-stone-700 bg-amber-50 border border-amber-300 hover:bg-amber-100 px-2 py-0.5 sm:py-1 rounded-lg shadow-2xs transition"
+            >
+              <span>Edit Tape</span>
+            </button>
+          )}
+
           <button
             type="button"
             id="listener-share-btn"
@@ -188,9 +201,10 @@ export const ListenerView: React.FC<ListenerViewProps> = ({
           type="button"
           id="footer-make-tape-btn"
           onClick={onMakeYourOwn}
-          className="py-1.5 sm:py-2 px-3.5 sm:px-5 bg-amber-600 hover:bg-amber-700 text-white rounded-xl font-mono-retro text-[10px] sm:text-xs font-bold uppercase tracking-wider shadow-xs transition"
+          className="py-2 sm:py-2.5 px-4 sm:px-6 bg-amber-600 hover:bg-amber-700 active:bg-amber-800 text-white rounded-xl font-mono-retro text-xs sm:text-sm font-bold uppercase tracking-wider shadow-xs hover:shadow-md transition inline-flex items-center gap-2"
         >
-          Create Your Mixtape
+          <Plus className="w-3.5 h-3.5" />
+          <span>Create Your Own Mixtape</span>
         </button>
       </div>
     </div>

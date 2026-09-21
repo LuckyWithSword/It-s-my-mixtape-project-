@@ -1,64 +1,106 @@
 import { Mixtape } from '../types';
 
-const LOCAL_STORAGE_KEY = 'digital_mixtapes_library_v1';
+function getAuthHeaders(token?: string | null, includeContentType = true): Record<string, string> {
+  const headers: Record<string, string> = {};
+  if (includeContentType) {
+    headers['Content-Type'] = 'application/json';
+  }
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
+  return headers;
+}
 
-export async function saveMixtapeToServer(mixtape: Mixtape): Promise<Mixtape> {
+export async function saveMixtapeToServer(mixtape: Mixtape, token?: string | null): Promise<Mixtape> {
+  const res = await fetch('/api/mixtapes', {
+    method: 'POST',
+    headers: getAuthHeaders(token, true),
+    body: JSON.stringify(mixtape)
+  });
+
+  if (!res.ok) {
+    const errorData = await res.json().catch(() => ({ error: 'Failed to save mixtape' }));
+    throw new Error(errorData.error || 'Failed to save mixtape to Turso database');
+  }
+
+  const saved = await res.json();
+  return saved as Mixtape;
+}
+
+export async function getMixtapeById(id: string, token?: string | null): Promise<Mixtape | null> {
+  const res = await fetch(`/api/mixtapes/${encodeURIComponent(id)}`, {
+    headers: getAuthHeaders(token, false)
+  });
+  if (res.ok) {
+    const tape = await res.json();
+    return tape as Mixtape;
+  }
+  if (res.status === 404) {
+    return null;
+  }
+  const errorData = await res.json().catch(() => ({ error: 'Error loading mixtape' }));
+  throw new Error(errorData.error || 'Failed to retrieve mixtape');
+}
+
+export async function fetchUserMixtapes(token?: string | null): Promise<Mixtape[]> {
   try {
-    const res = await fetch('/api/mixtapes', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(mixtape)
+    const res = await fetch('/api/my-mixtapes', {
+      headers: getAuthHeaders(token, false)
     });
     if (res.ok) {
-      const saved = await res.json();
-      saveMixtapeLocally(saved);
-      return saved;
+      const list = await res.json();
+      return list as Mixtape[];
     }
   } catch (err) {
-    console.warn('Could not save to server, saving locally:', err);
+    console.warn('Failed to load user mixtapes:', err);
   }
-
-  // Fallback to local save
-  saveMixtapeLocally(mixtape);
-  return mixtape;
+  return [];
 }
 
-export async function getMixtapeById(id: string): Promise<Mixtape | null> {
-  // Try server first
-  try {
-    const res = await fetch(`/api/mixtapes/${encodeURIComponent(id)}`);
-    if (res.ok) {
-      const tape = await res.json();
-      return tape as Mixtape;
-    }
-  } catch (err) {
-    console.warn('Server fetch error:', err);
+export async function updateMixtapeOnServer(id: string, updates: Partial<Mixtape>, token?: string | null): Promise<Mixtape> {
+  const res = await fetch(`/api/mixtapes/${encodeURIComponent(id)}`, {
+    method: 'PUT',
+    headers: getAuthHeaders(token, true),
+    body: JSON.stringify(updates)
+  });
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: 'Failed to update mixtape' }));
+    throw new Error(err.error || 'Failed to update mixtape');
   }
 
-  // Check local storage fallback
-  const localTapes = getLocalMixtapes();
-  if (localTapes[id]) {
-    return localTapes[id];
-  }
-
-  return null;
+  return await res.json();
 }
 
-export function saveMixtapeLocally(mixtape: Mixtape) {
-  try {
-    const existing = getLocalMixtapes();
-    existing[mixtape.id] = mixtape;
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(existing));
-  } catch (e) {
-    console.warn('localStorage error:', e);
+export async function deleteMixtapeFromServer(id: string, token?: string | null): Promise<boolean> {
+  const res = await fetch(`/api/mixtapes/${encodeURIComponent(id)}`, {
+    method: 'DELETE',
+    headers: getAuthHeaders(token, false)
+  });
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: 'Failed to delete mixtape' }));
+    throw new Error(err.error || 'Failed to delete mixtape');
   }
+
+  return true;
 }
 
-export function getLocalMixtapes(): Record<string, Mixtape> {
-  try {
-    const raw = localStorage.getItem(LOCAL_STORAGE_KEY);
-    return raw ? JSON.parse(raw) : {};
-  } catch (e) {
-    return {};
+export async function syncUserWithTurso(
+  token: string,
+  details?: { email?: string; displayName?: string; avatarUrl?: string }
+): Promise<any> {
+  const res = await fetch('/api/auth/sync', {
+    method: 'POST',
+    headers: getAuthHeaders(token, true),
+    body: JSON.stringify(details || {})
+  });
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: 'Failed to sync Turso user' }));
+    throw new Error(err.error || 'Failed to sync Turso user');
   }
+
+  return await res.json();
 }
+

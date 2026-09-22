@@ -1,77 +1,42 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { useUser, useAuth } from '@clerk/clerk-react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Mixtape, AppView } from './types';
 import { LandingView } from './components/LandingView';
 import { CreateWizard } from './components/CreateWizard';
 import { ShareSuccessView } from './components/ShareSuccessView';
 import { ListenerView } from './components/ListenerView';
 import { UserDashboard } from './components/UserDashboard';
-import { AccountView } from './components/AccountView';
-import { HeaderNav } from './components/HeaderNav';
 import {
   getMixtapeById,
-  saveMixtapeToServer,
-  updateMixtapeOnServer,
-  deleteMixtapeFromServer,
-  fetchUserMixtapes,
-  syncUserWithTurso
+  saveMixtape,
+  updateMixtape,
+  deleteMixtape,
+  fetchUserMixtapes
 } from './utils/storage';
-import { Loader2, AlertCircle, ShieldAlert, LayoutDashboard } from 'lucide-react';
+import { Loader2, AlertCircle } from 'lucide-react';
 
 export default function App() {
-  const { isLoaded: isUserLoaded, isSignedIn, user } = useUser();
-  const { getToken } = useAuth();
-
   const [currentView, setCurrentView] = useState<AppView>('landing');
   const [activeMixtape, setActiveMixtape] = useState<Mixtape | null>(null);
   const [editingMixtape, setEditingMixtape] = useState<Mixtape | null>(null);
   const [isLoadingTape, setIsLoadingTape] = useState<boolean>(false);
   const [tapeLoadError, setTapeLoadError] = useState<string | null>(null);
-  const [editForbidden, setEditForbidden] = useState<boolean>(false);
 
   // Mixtapes list
   const [userMixtapes, setUserMixtapes] = useState<Mixtape[]>([]);
   const [isLoadingUserMixtapes, setIsLoadingUserMixtapes] = useState<boolean>(false);
 
-  // Keep track of syncing to prevent redundant calls
-  const syncedClerkIdRef = useRef<string | null>(null);
-
-  // Background Turso user profile synchronization upon Clerk sign-in
-  useEffect(() => {
-    if (!isUserLoaded || !isSignedIn || !user) return;
-    if (syncedClerkIdRef.current === user.id) return;
-
-    const performSync = async () => {
-      try {
-        const token = await getToken();
-        if (!token) return;
-        await syncUserWithTurso(token, {
-          email: user.primaryEmailAddress?.emailAddress,
-          displayName: user.fullName || `${user.firstName || ''} ${user.lastName || ''}`.trim(),
-          avatarUrl: user.imageUrl
-        });
-        syncedClerkIdRef.current = user.id;
-      } catch (err) {
-        console.warn('Turso sync warning:', err);
-      }
-    };
-
-    performSync();
-  }, [isUserLoaded, isSignedIn, user, getToken]);
-
-  // Load user mixtapes from Turso
+  // Load user mixtapes from local storage
   const loadUserMixtapes = useCallback(async () => {
     setIsLoadingUserMixtapes(true);
     try {
-      const token = await getToken();
-      const tapes = await fetchUserMixtapes(token);
+      const tapes = await fetchUserMixtapes();
       setUserMixtapes(tapes);
     } catch (e) {
       console.warn('Could not load mixtapes:', e);
     } finally {
       setIsLoadingUserMixtapes(false);
     }
-  }, [getToken]);
+  }, []);
 
   // Load specific tape for public playback (/m/:shareId or /tape/:id)
   const loadTape = useCallback(async (idOrShareId: string) => {
@@ -79,9 +44,7 @@ export default function App() {
     setTapeLoadError(null);
 
     try {
-      // Optional token for ownership check if viewer is logged in
-      const token = await getToken().catch(() => null);
-      const tape = await getMixtapeById(idOrShareId, token);
+      const tape = await getMixtapeById(idOrShareId);
       if (tape) {
         setActiveMixtape(tape);
         setCurrentView('listen');
@@ -89,50 +52,35 @@ export default function App() {
         setTapeLoadError(`We couldn't find a cassette mixtape with ID "${idOrShareId}".`);
         setCurrentView('landing');
       }
-    } catch (err: any) {
+    } catch {
       setTapeLoadError('Failed to load this mixtape.');
       setCurrentView('landing');
     } finally {
       setIsLoadingTape(false);
     }
-  }, [getToken]);
+  }, []);
 
-  // Load tape for editing with strict ownership verification
+  // Load tape for editing
   const loadTapeForEdit = useCallback(async (id: string) => {
     setIsLoadingTape(true);
     setTapeLoadError(null);
-    setEditForbidden(false);
 
     try {
-      const token = await getToken();
-      const tape = await getMixtapeById(id, token);
+      const tape = await getMixtapeById(id);
       if (!tape) {
         setTapeLoadError('Mixtape not found.');
         setCurrentView('dashboard');
         return;
       }
-
-      // Check server-computed ownership
-      if (tape.isOwner === false) {
-        setEditForbidden(true);
-        setCurrentView('edit');
-        return;
-      }
-
       setEditingMixtape(tape);
       setCurrentView('edit');
     } catch (err: any) {
-      if (err.message && err.message.toLowerCase().includes('permission')) {
-        setEditForbidden(true);
-        setCurrentView('edit');
-      } else {
-        setTapeLoadError(err.message || 'Failed to load mixtape for editing.');
-        setCurrentView('dashboard');
-      }
+      setTapeLoadError(err.message || 'Failed to load mixtape for editing.');
+      setCurrentView('dashboard');
     } finally {
       setIsLoadingTape(false);
     }
-  }, [getToken]);
+  }, []);
 
   // Route Resolver based on current URL
   const resolveRouteFromUrl = useCallback(() => {
@@ -140,7 +88,7 @@ export default function App() {
     const hash = window.location.hash;
     const searchParams = new URLSearchParams(window.location.search);
 
-    // 1. Shared mixtape playback (/m/:shareId or /tape/:id) - Public access (Zero login requirement)
+    // 1. Shared mixtape playback (/m/:shareId or /tape/:id)
     let tapeId: string | null = null;
     const pathMatch = pathname.match(/^\/(?:tape|m)\/([a-zA-Z0-9_-]+)/);
     if (pathMatch && pathMatch[1]) {
@@ -158,51 +106,24 @@ export default function App() {
       return;
     }
 
-    // 2. Account route /account
-    if (pathname === '/account' || hash === '#account') {
-      setCurrentView('account');
-      return;
-    }
-
-    // 3. Edit route /edit/:id or #edit/:id (Protected)
+    // 2. Edit route /edit/:id or #edit/:id
     const editPathMatch = pathname.match(/^\/edit\/([a-zA-Z0-9_-]+)/);
     const editHashMatch = hash.match(/^#edit\/([a-zA-Z0-9_-]+)/);
     const editId = (editPathMatch && editPathMatch[1]) || (editHashMatch && editHashMatch[1]);
     if (editId) {
-      if (!isUserLoaded) return; // Wait for Clerk to resolve session
-      if (!isSignedIn) {
-        sessionStorage.setItem('auth_redirect_destination', pathname);
-        window.history.replaceState({}, '', '/account');
-        setCurrentView('account');
-        return;
-      }
       loadTapeForEdit(editId);
       return;
     }
 
-    // 4. Create route /create or #create (Protected)
+    // 3. Create route /create or #create
     if (pathname === '/create' || hash === '#create') {
-      if (!isUserLoaded) return; // Wait for Clerk to resolve session
-      if (!isSignedIn) {
-        sessionStorage.setItem('auth_redirect_destination', '/create');
-        window.history.replaceState({}, '', '/account');
-        setCurrentView('account');
-        return;
-      }
       setEditingMixtape(null);
       setCurrentView('create');
       return;
     }
 
-    // 5. Dashboard route /dashboard or #dashboard (Protected)
+    // 4. Dashboard route /dashboard or #dashboard
     if (pathname === '/dashboard' || pathname.startsWith('/dashboard') || hash === '#dashboard') {
-      if (!isUserLoaded) return; // Wait for Clerk to resolve session
-      if (!isSignedIn) {
-        sessionStorage.setItem('auth_redirect_destination', '/dashboard');
-        window.history.replaceState({}, '', '/account');
-        setCurrentView('account');
-        return;
-      }
       setCurrentView('dashboard');
       loadUserMixtapes();
       return;
@@ -210,9 +131,9 @@ export default function App() {
 
     // Default Landing View
     setCurrentView('landing');
-  }, [isUserLoaded, isSignedIn, loadTape, loadTapeForEdit, loadUserMixtapes]);
+  }, [loadTape, loadTapeForEdit, loadUserMixtapes]);
 
-  // Initial and reactive routing when URL changes or user auth state settles
+  // Initial and reactive routing when URL changes
   useEffect(() => {
     resolveRouteFromUrl();
 
@@ -224,52 +145,22 @@ export default function App() {
     return () => window.removeEventListener('popstate', onPopState);
   }, [resolveRouteFromUrl]);
 
-  // When user completes sign-in, redirect to pending destination if stored
-  useEffect(() => {
-    if (isUserLoaded && isSignedIn) {
-      const pendingDestination = sessionStorage.getItem('auth_redirect_destination');
-      if (pendingDestination) {
-        sessionStorage.removeItem('auth_redirect_destination');
-        window.history.replaceState({}, '', pendingDestination);
-        resolveRouteFromUrl();
-      }
-    }
-  }, [isUserLoaded, isSignedIn, resolveRouteFromUrl]);
-
   // Navigation Helpers
   const navigateToLanding = () => {
     window.history.pushState({}, '', '/');
     setCurrentView('landing');
     setActiveMixtape(null);
     setEditingMixtape(null);
-    setEditForbidden(false);
-  };
-
-  const navigateToAccount = () => {
-    window.history.pushState({}, '', '/account');
-    setCurrentView('account');
   };
 
   const navigateToCreate = () => {
-    if (!isSignedIn) {
-      sessionStorage.setItem('auth_redirect_destination', '/create');
-      navigateToAccount();
-      return;
-    }
     window.history.pushState({}, '', '/create');
     setEditingMixtape(null);
-    setEditForbidden(false);
     setCurrentView('create');
   };
 
   const navigateToDashboard = () => {
-    if (!isSignedIn) {
-      sessionStorage.setItem('auth_redirect_destination', '/dashboard');
-      navigateToAccount();
-      return;
-    }
     window.history.pushState({}, '', '/dashboard');
-    setEditForbidden(false);
     setCurrentView('dashboard');
     loadUserMixtapes();
   };
@@ -280,22 +171,15 @@ export default function App() {
   };
 
   const handleEditTape = (tape: Mixtape) => {
-    if (!isSignedIn) {
-      sessionStorage.setItem('auth_redirect_destination', `/edit/${tape.id}`);
-      navigateToAccount();
-      return;
-    }
     setEditingMixtape(tape);
-    setEditForbidden(false);
     window.history.pushState({}, '', `/edit/${tape.id}`);
     setCurrentView('edit');
   };
 
   // Called when wizard finishes saving/updating a mixtape
   const handleFinishCreate = async (tapeData: Mixtape) => {
-    const token = await getToken();
     if (editingMixtape) {
-      const updated = await updateMixtapeOnServer(tapeData.id, tapeData, token);
+      const updated = await updateMixtape(tapeData.id, tapeData);
       setActiveMixtape(updated);
       setEditingMixtape(null);
       const shareKey = updated.shareId || updated.share_id || updated.id;
@@ -303,7 +187,7 @@ export default function App() {
       setCurrentView('listen');
       loadUserMixtapes();
     } else {
-      const saved = await saveMixtapeToServer(tapeData, token);
+      const saved = await saveMixtape(tapeData);
       setActiveMixtape(saved);
       const shareKey = saved.shareId || saved.share_id || saved.id;
       window.history.pushState({}, '', `/m/${shareKey}`);
@@ -312,34 +196,21 @@ export default function App() {
     }
   };
 
-  // Delete mixtape handler with ownership protection
+  // Delete mixtape handler
   const handleDeleteTape = async (id: string) => {
     try {
-      const token = await getToken();
-      await deleteMixtapeFromServer(id, token);
+      await deleteMixtape(id);
       setUserMixtapes((prev) => prev.filter((t) => t.id !== id));
       if (activeMixtape && activeMixtape.id === id) {
         setActiveMixtape(null);
       }
     } catch (e: any) {
-      alert(e.message || 'Failed to delete mixtape');
+      console.warn('Failed to delete mixtape:', e);
     }
   };
 
-  // Check if current view is public listener view
-  const isPublicListenerView = currentView === 'listen';
-
   return (
     <div className="min-h-screen bg-[#f5efe1] text-stone-800 font-sans flex flex-col justify-between selection:bg-amber-200">
-      {/* Top Persistent Header Navigation (Shown on non-listener views) */}
-      {!isPublicListenerView && (
-        <HeaderNav
-          onNavigateHome={navigateToLanding}
-          onNavigateToAccount={navigateToAccount}
-          onNavigateToDashboard={navigateToDashboard}
-        />
-      )}
-
       {/* Loading overlay for tape rewinding / fetching */}
       {isLoadingTape && (
         <div className="flex-1 flex flex-col items-center justify-center py-16 px-4">
@@ -367,7 +238,7 @@ export default function App() {
               <button
                 type="button"
                 onClick={() => setTapeLoadError(null)}
-                className="underline ml-2"
+                className="underline ml-2 cursor-pointer"
               >
                 Dismiss
               </button>
@@ -379,18 +250,12 @@ export default function App() {
             <LandingView
               onStartCreate={navigateToCreate}
               onExploreSample={(sampleId) => navigateToListener(sampleId)}
+              onOpenDashboard={navigateToDashboard}
+              savedTapesCount={userMixtapes.length}
             />
           )}
 
-          {/* 2. Account View (/account) */}
-          {currentView === 'account' && (
-            <AccountView
-              onNavigateToDashboard={navigateToDashboard}
-              onNavigateHome={navigateToLanding}
-            />
-          )}
-
-          {/* 3. Create Mixtape Wizard (Protected) */}
+          {/* 2. Create Mixtape Wizard */}
           {currentView === 'create' && (
             <CreateWizard
               onCancel={navigateToLanding}
@@ -398,37 +263,16 @@ export default function App() {
             />
           )}
 
-          {/* 4. Edit Mixtape Wizard (Protected & Ownership enforced) */}
+          {/* 3. Edit Mixtape Wizard */}
           {currentView === 'edit' && (
-            editForbidden ? (
-              <div className="w-full max-w-md mx-auto px-4 py-12 text-center">
-                <div className="p-6 bg-white border border-rose-300 rounded-2xl shadow-sm">
-                  <ShieldAlert className="w-10 h-10 text-rose-600 mx-auto mb-3" />
-                  <h2 className="font-marker text-stone-900 text-lg mb-2">Access Denied</h2>
-                  <p className="font-sans text-stone-600 text-sm mb-6">
-                    You do not have permission to edit this mixtape.
-                  </p>
-                  <button
-                    type="button"
-                    id="forbidden-go-to-dashboard-btn"
-                    onClick={navigateToDashboard}
-                    className="py-2.5 px-5 bg-amber-600 hover:bg-amber-700 active:bg-amber-800 text-white rounded-xl font-mono-retro text-xs font-bold uppercase tracking-wider shadow-xs transition inline-flex items-center gap-2"
-                  >
-                    <LayoutDashboard className="w-4 h-4" />
-                    <span>GO TO DASHBOARD</span>
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <CreateWizard
-                initialMixtape={editingMixtape}
-                onCancel={navigateToDashboard}
-                onFinish={handleFinishCreate}
-              />
-            )
+            <CreateWizard
+              initialMixtape={editingMixtape}
+              onCancel={navigateToDashboard}
+              onFinish={handleFinishCreate}
+            />
           )}
 
-          {/* 5. Share Success View */}
+          {/* 4. Share Success View */}
           {currentView === 'share-success' && activeMixtape && (
             <ShareSuccessView
               mixtape={activeMixtape}
@@ -437,7 +281,7 @@ export default function App() {
             />
           )}
 
-          {/* 6. Listener View (Fully Public - Zero login barrier) */}
+          {/* 5. Listener View (Fully Public - Zero login barrier) */}
           {currentView === 'listen' && activeMixtape && (
             <ListenerView
               mixtape={activeMixtape}
@@ -447,7 +291,7 @@ export default function App() {
             />
           )}
 
-          {/* 7. Creator Mixtape Library / Dashboard (Protected) */}
+          {/* 6. Creator Mixtape Library / Dashboard */}
           {currentView === 'dashboard' && (
             <UserDashboard
               mixtapes={userMixtapes}
@@ -456,6 +300,7 @@ export default function App() {
               onPlayTape={navigateToListener}
               onEditTape={handleEditTape}
               onDeleteTape={handleDeleteTape}
+              onGoHome={navigateToLanding}
             />
           )}
         </main>
@@ -479,3 +324,4 @@ export default function App() {
     </div>
   );
 }
+

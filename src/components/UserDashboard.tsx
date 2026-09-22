@@ -15,7 +15,8 @@ import {
   ExternalLink,
   MoreVertical,
   AlertTriangle,
-  Loader2
+  Loader2,
+  ArrowLeft
 } from 'lucide-react';
 
 interface UserDashboardProps {
@@ -25,6 +26,7 @@ interface UserDashboardProps {
   onPlayTape: (id: string) => void;
   onEditTape: (tape: Mixtape) => void;
   onDeleteTape: (id: string) => Promise<void>;
+  onGoHome?: () => void;
 }
 
 export const UserDashboard: React.FC<UserDashboardProps> = ({
@@ -33,7 +35,8 @@ export const UserDashboard: React.FC<UserDashboardProps> = ({
   onCreateNew,
   onPlayTape,
   onEditTape,
-  onDeleteTape
+  onDeleteTape,
+  onGoHome
 }) => {
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
@@ -85,6 +88,17 @@ export const UserDashboard: React.FC<UserDashboardProps> = ({
             Manage your cassettes and share links
           </span>
         </div>
+        {onGoHome && (
+          <button
+            type="button"
+            id="dashboard-home-btn"
+            onClick={onGoHome}
+            className="flex items-center gap-1 text-[11px] sm:text-xs font-mono-retro font-semibold text-stone-600 hover:text-stone-900 transition py-1 px-2.5 rounded-lg border border-stone-300 bg-white hover:bg-stone-50 cursor-pointer shadow-2xs"
+          >
+            <ArrowLeft className="w-3.5 h-3.5" />
+            <span>Home</span>
+          </button>
+        )}
       </div>
 
       {/* Main CTA: Create New Mixtape */}

@@ -62,9 +62,6 @@ export interface CassetteCustomization {
 
 export interface Mixtape {
   id: string;
-  owner_id?: string;
-  ownerId?: string;
-  clerkUserId?: string;
   name: string;
   title?: string;
   shareId?: string;
@@ -75,24 +72,6 @@ export interface Mixtape {
   songs: Song[];
   createdAt: string;
   updatedAt?: string;
-  isOwner?: boolean;
-}
-
-export interface User {
-  id: string;
-  email: string;
-  created_at: string;
-  updated_at: string;
-}
-
-export interface Profile {
-  id: string;
-  userId: string;
-  displayName: string;
-  username?: string;
-  avatarUrl?: string;
-  createdAt: string;
-  updatedAt: string;
 }
 
 export type AppView = 
@@ -102,5 +81,5 @@ export type AppView =
   | 'preview'
   | 'share-success'
   | 'listen'
-  | 'dashboard'
-  | 'account';
+  | 'dashboard';
+

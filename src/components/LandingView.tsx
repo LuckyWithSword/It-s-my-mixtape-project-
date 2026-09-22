@@ -6,6 +6,8 @@ import { Disc, ArrowRight, Play } from 'lucide-react';
 interface LandingViewProps {
   onStartCreate: () => void;
   onExploreSample: (sampleId: string) => void;
+  onOpenDashboard?: () => void;
+  savedTapesCount?: number;
 }
 
 const DEMO_CASSETTE: { name: string; customization: CassetteCustomization } = {
@@ -26,7 +28,9 @@ const DEMO_CASSETTE: { name: string; customization: CassetteCustomization } = {
 
 export const LandingView: React.FC<LandingViewProps> = ({
   onStartCreate,
-  onExploreSample
+  onExploreSample,
+  onOpenDashboard,
+  savedTapesCount
 }) => {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -70,16 +74,31 @@ export const LandingView: React.FC<LandingViewProps> = ({
       </div>
 
       {/* Core Action Call To Action */}
-      <div className="flex items-center justify-center w-full max-w-xs mb-4 sm:mb-8">
+      <div className="flex flex-col sm:flex-row items-center justify-center gap-2.5 w-full max-w-sm mb-4 sm:mb-8">
         <button
           type="button"
           id="hero-create-mixtape-btn"
           onClick={onStartCreate}
-          className="w-full py-2.5 sm:py-3.5 px-4 sm:px-6 bg-amber-600 hover:bg-amber-700 active:bg-amber-800 text-white rounded-xl font-mono-retro text-xs sm:text-sm font-bold uppercase tracking-wider shadow-sm sm:shadow-md shadow-amber-900/20 hover:shadow-lg transition flex items-center justify-center gap-2 group"
+          className="w-full sm:flex-1 py-2.5 sm:py-3.5 px-4 sm:px-6 bg-amber-600 hover:bg-amber-700 active:bg-amber-800 text-white rounded-xl font-mono-retro text-xs sm:text-sm font-bold uppercase tracking-wider shadow-sm sm:shadow-md shadow-amber-900/20 hover:shadow-lg transition flex items-center justify-center gap-2 group cursor-pointer"
         >
           <span>Create a Mixtape</span>
           <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 group-hover:translate-x-1 transition-transform" />
         </button>
+        {onOpenDashboard && (
+          <button
+            type="button"
+            id="hero-my-tapes-btn"
+            onClick={onOpenDashboard}
+            className="w-full sm:w-auto py-2.5 sm:py-3.5 px-4 bg-white/90 hover:bg-white text-stone-700 border border-stone-300 rounded-xl font-mono-retro text-xs sm:text-sm font-bold uppercase tracking-wider shadow-xs hover:shadow-sm transition flex items-center justify-center gap-1.5 cursor-pointer"
+          >
+            <span>My Tapes</span>
+            {savedTapesCount !== undefined && savedTapesCount > 0 && (
+              <span className="text-[10px] bg-amber-100 text-amber-800 px-1.5 py-0.5 rounded-full font-bold">
+                {savedTapesCount}
+              </span>
+            )}
+          </button>
+        )}
       </div>
 
       {/* Steps Highlight */}

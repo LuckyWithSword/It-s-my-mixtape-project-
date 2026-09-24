@@ -18,14 +18,14 @@ export const SongListManager: React.FC<SongListManagerProps> = ({
     <div className="w-full space-y-2">
       {/* Selected Tracks List or Empty State */}
       {songs.length === 0 ? (
-        <div className="text-center py-7 px-4 bg-white rounded-2xl border-0 shadow-none">
-          <div className="w-8 h-8 rounded-full bg-orange-50 flex items-center justify-center mx-auto mb-2 text-orange-600">
+        <div className="text-center py-7 px-4 bg-white border border-dashed border-stone-300/80 rounded-2xl shadow-soft-card">
+          <div className="w-8 h-8 rounded-full bg-orange-50 border border-orange-100 flex items-center justify-center mx-auto mb-2 text-orange-600">
             <Music className="w-4 h-4" />
           </div>
-          <p className="text-xs font-bold uppercase tracking-wider text-stone-800">
+          <p className="text-xs font-goga font-bold uppercase tracking-wider text-stone-800">
             NO TRACKS YET
           </p>
-          <p className="text-[11px] text-stone-500 mt-1 max-w-xs mx-auto">
+          <p className="text-[11px] font-goga text-stone-500 mt-1 max-w-xs mx-auto">
             Add up to 5 songs to build your tape.
           </p>
         </div>
@@ -39,23 +39,23 @@ export const SongListManager: React.FC<SongListManagerProps> = ({
             return (
               <li
                 key={song.id}
-                className="flex items-center justify-between p-2.5 sm:p-3 bg-white rounded-xl border-0 shadow-none hover:bg-stone-50 transition group"
+                className="flex items-center justify-between p-2.5 sm:p-3 bg-white border border-stone-200/90 rounded-xl shadow-soft-card hover:border-stone-300 transition group"
               >
                 <div className="flex items-center gap-2.5 min-w-0 pr-2">
                   {/* Track Number Badge */}
-                  <span className="w-5 h-5 rounded-md bg-stone-100 border-0 text-stone-700 font-sans font-bold text-[10px] flex items-center justify-center shrink-0 tabular-nums">
+                  <span className="w-5 h-5 rounded-md bg-stone-100 border border-stone-200 text-stone-700 font-remixa font-bold text-[10px] flex items-center justify-center shrink-0 tabular-nums">
                     {trackNum}
                   </span>
 
-                  {/* Track Info: Title & Artist */}
+                  {/* Track Info: Title & Artist - Goga */}
                   <div className="min-w-0">
                     <p
-                      className="text-xs sm:text-sm font-semibold text-stone-900 truncate leading-snug"
+                      className="text-xs sm:text-sm font-goga font-semibold text-stone-900 truncate leading-snug"
                       title={song.title}
                     >
                       {song.title}
                     </p>
-                    <p className="text-[11px] text-stone-500 truncate leading-tight mt-0.5">
+                    <p className="text-[11px] font-goga text-stone-500 truncate leading-tight mt-0.5">
                       {song.artist || 'YouTube Audio'}
                     </p>
                   </div>

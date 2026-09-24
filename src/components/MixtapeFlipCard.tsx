@@ -526,10 +526,10 @@ export const MixtapeFlipCard: React.FC<MixtapeFlipCardProps> = ({
                   e.stopPropagation();
                   triggerFlip('left');
                 }}
-                className="flex items-center gap-1 sm:gap-1.5 px-2 sm:px-2.5 py-0.5 sm:py-1 bg-stone-900/80 hover:bg-stone-950 text-stone-200 hover:text-amber-400 rounded-full border border-stone-700/80 backdrop-blur-xs text-[9px] sm:text-[10px] font-mono-retro font-semibold tracking-wider shadow-sm transition active:scale-95"
+                className="flex items-center gap-1 sm:gap-1.5 px-2 sm:px-2.5 py-0.5 sm:py-1 bg-stone-900/80 hover:bg-stone-950 text-stone-200 hover:text-orange-400 rounded-full border border-stone-700/80 backdrop-blur-xs text-[9px] sm:text-[10px] font-goga font-semibold tracking-wider shadow-sm transition active:scale-95 cursor-pointer"
                 title="Flip to Music Player"
               >
-                <RefreshCw className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-amber-400" />
+                <RefreshCw className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-orange-400" />
                 <span>Player</span>
               </button>
             </div>
@@ -571,16 +571,16 @@ export const MixtapeFlipCard: React.FC<MixtapeFlipCardProps> = ({
               {/* Top Header: Track index badge, equalizer, and flip button */}
               <div className="flex items-center justify-between gap-1 sm:gap-2 border-b border-stone-800 pb-0.5 sm:pb-2">
                 <div className="flex items-center gap-1 sm:gap-2 min-w-0">
-                  <span className="text-[8px] sm:text-[11px] font-mono-retro font-bold uppercase tracking-wider text-amber-400 bg-stone-950 px-1 sm:px-2 py-0.5 rounded-md border border-stone-800 shrink-0">
+                  <span className="text-[8px] sm:text-[11px] font-remixa font-bold uppercase tracking-wider text-orange-400 bg-stone-950 px-1 sm:px-2 py-0.5 rounded-md border border-stone-800 shrink-0">
                     Track {totalTracks > 0 ? currentTrackIndex + 1 : 0} / {totalTracks}
                   </span>
                   {isPlaying ? (
-                    <div className="flex items-center gap-1 text-[8px] sm:text-[10px] font-mono-retro text-emerald-400 font-bold uppercase tracking-wider">
+                    <div className="flex items-center gap-1 text-[8px] sm:text-[10px] font-remixa text-emerald-400 font-bold uppercase tracking-wider">
                       <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                       <span>Playing</span>
                     </div>
                   ) : (
-                    <span className="text-[8px] sm:text-[10px] font-mono-retro text-stone-400 uppercase tracking-wider">
+                    <span className="text-[8px] sm:text-[10px] font-remixa text-stone-400 uppercase tracking-wider">
                       Paused
                     </span>
                   )}
@@ -594,10 +594,10 @@ export const MixtapeFlipCard: React.FC<MixtapeFlipCardProps> = ({
                     e.stopPropagation();
                     triggerFlip('right');
                   }}
-                  className="flex items-center gap-1 px-1.5 sm:px-2 py-0.5 bg-stone-800/80 hover:bg-stone-700 text-stone-300 hover:text-white rounded-md text-[8px] sm:text-[10px] font-mono-retro transition active:scale-95 shrink-0"
+                  className="flex items-center gap-1 px-1.5 sm:px-2 py-0.5 bg-stone-800/80 hover:bg-stone-700 text-stone-300 hover:text-white rounded-md text-[8px] sm:text-[10px] font-goga transition active:scale-95 shrink-0 cursor-pointer"
                   title="Flip back to Cassette Tape"
                 >
-                  <RefreshCw className="w-2 h-2 sm:w-2.5 sm:h-2.5 text-amber-400" />
+                  <RefreshCw className="w-2 h-2 sm:w-2.5 sm:h-2.5 text-orange-400" />
                   <span>Tape</span>
                 </button>
               </div>
@@ -606,7 +606,7 @@ export const MixtapeFlipCard: React.FC<MixtapeFlipCardProps> = ({
               <div className="my-auto py-0.5 sm:py-1">
                 <div className="flex items-center justify-between gap-1 sm:gap-2 mb-0.5 sm:mb-2">
                   <h4
-                    className="font-sans font-semibold text-stone-100 text-[11px] sm:text-sm truncate"
+                    className="font-goga font-semibold text-stone-100 text-[11px] sm:text-sm truncate"
                     title={currentTrackTitle}
                   >
                     {currentTrackTitle || 'No track selected'}
@@ -615,17 +615,17 @@ export const MixtapeFlipCard: React.FC<MixtapeFlipCardProps> = ({
                   {/* Dynamic Audio Equalizer Bars */}
                   <div className="flex items-end gap-0.5 h-2 sm:h-3 shrink-0">
                     <span
-                      className={`w-0.5 bg-amber-400 rounded-full transition-all duration-300 ${
+                      className={`w-0.5 bg-orange-400 rounded-full transition-all duration-300 ${
                         isPlaying ? 'h-2 sm:h-3 animate-pulse' : 'h-1 opacity-40'
                       }`}
                     />
                     <span
-                      className={`w-0.5 bg-amber-400 rounded-full transition-all duration-300 ${
+                      className={`w-0.5 bg-orange-400 rounded-full transition-all duration-300 ${
                         isPlaying ? 'h-1.5 sm:h-2 animate-ping' : 'h-0.5 sm:h-1.5 opacity-40'
                       }`}
                     />
                     <span
-                      className={`w-0.5 bg-amber-400 rounded-full transition-all duration-300 ${
+                      className={`w-0.5 bg-orange-400 rounded-full transition-all duration-300 ${
                         isPlaying ? 'h-2 sm:h-3 animate-pulse' : 'h-1 opacity-40'
                       }`}
                     />
@@ -652,7 +652,7 @@ export const MixtapeFlipCard: React.FC<MixtapeFlipCardProps> = ({
                     />
                   </div>
 
-                  <div className="flex justify-between items-center mt-0.5 text-[8px] sm:text-[10px] font-mono-retro text-stone-400 tabular-nums">
+                  <div className="flex justify-between items-center mt-0.5 text-[8px] sm:text-[10px] font-remixa text-stone-400 tabular-nums">
                     <span>{formatTime(currentTime)}</span>
                     <span>{formatTime(duration)}</span>
                   </div>

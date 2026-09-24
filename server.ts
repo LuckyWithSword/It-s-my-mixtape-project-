@@ -24,6 +24,32 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok' });
 });
 
+// Explicit manifest handlers for both webmanifest and json formats with correct MIME type
+app.get(['/manifest.json', '/manifest.webmanifest'], (req, res, next) => {
+  res.setHeader('Content-Type', 'application/manifest+json');
+  const distManifest = path.join(process.cwd(), 'dist', 'manifest.webmanifest');
+  const publicWebmanifest = path.join(process.cwd(), 'public', 'manifest.webmanifest');
+  const publicJson = path.join(process.cwd(), 'public', 'manifest.json');
+  if (fs.existsSync(distManifest)) {
+    return res.sendFile(distManifest);
+  } else if (fs.existsSync(publicWebmanifest)) {
+    return res.sendFile(publicWebmanifest);
+  } else if (fs.existsSync(publicJson)) {
+    return res.sendFile(publicJson);
+  }
+  next();
+});
+
+// Explicit service worker handler with correct JavaScript MIME type
+app.get('/sw.js', (req, res, next) => {
+  const distSw = path.join(process.cwd(), 'dist', 'sw.js');
+  if (fs.existsSync(distSw)) {
+    res.setHeader('Content-Type', 'application/javascript');
+    return res.sendFile(distSw);
+  }
+  next();
+});
+
 // Artwork upload endpoint (fast server-side fallback/storage)
 app.post('/api/upload-artwork', (req, res) => {
   try {

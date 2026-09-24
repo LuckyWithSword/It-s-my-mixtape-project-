@@ -72,13 +72,13 @@ export const SongInputForm: React.FC<SongInputFormProps> = ({
   };
 
   return (
-    <div className="w-full bg-white rounded-2xl p-3.5 sm:p-4 border-0 shadow-none">
+    <div className="w-full bg-white border border-stone-200/90 rounded-2xl p-3.5 sm:p-4 shadow-soft-card">
       {/* Card Header */}
       <div className="flex items-center justify-between pb-2 mb-2.5 border-b border-stone-100">
-        <span className="text-[11px] font-sans font-bold uppercase tracking-wider text-stone-800">
+        <span className="text-[11px] font-goga font-bold uppercase tracking-wider text-stone-800">
           ADD YOUTUBE SONG
         </span>
-        <span className="text-[10px] font-sans font-semibold text-stone-400 uppercase tracking-wider">
+        <span className="text-[10px] font-remixa font-semibold text-stone-400 uppercase tracking-wider">
           {isFull ? 'Tape Full' : `${maxSongs - currentSongCount} Slots Left`}
         </span>
       </div>
@@ -105,7 +105,7 @@ export const SongInputForm: React.FC<SongInputFormProps> = ({
             }}
             disabled={isFull || isLoading}
             placeholder="Paste YouTube link..."
-            className="w-full h-10 pl-9 pr-3 bg-[#FAF7F2] border border-stone-200 rounded-xl text-xs sm:text-sm text-stone-900 placeholder:text-stone-400 focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500 disabled:opacity-50 transition"
+            className="w-full h-10 pl-9 pr-3 bg-[#FAF7F2] border border-stone-200 rounded-xl text-xs sm:text-sm font-goga text-stone-900 placeholder:text-stone-400 focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500 disabled:opacity-50 transition"
           />
         </div>
 
@@ -114,7 +114,7 @@ export const SongInputForm: React.FC<SongInputFormProps> = ({
           id="add-song-btn"
           onClick={() => handleAdd()}
           disabled={isFull || isLoading || !urlInput.trim()}
-          className="h-10 px-4 bg-orange-600 hover:bg-orange-700 active:bg-orange-800 disabled:bg-stone-200 disabled:text-stone-400 disabled:cursor-not-allowed text-white text-xs font-bold uppercase tracking-wider rounded-xl transition flex items-center justify-center gap-1.5 shrink-0 cursor-pointer"
+          className="h-10 px-4 bg-orange-600 hover:bg-orange-700 active:bg-orange-800 disabled:bg-stone-200 disabled:text-stone-400 disabled:cursor-not-allowed text-white text-xs font-goga font-bold uppercase tracking-wider rounded-xl transition flex items-center justify-center gap-1.5 shrink-0 cursor-pointer"
         >
           {isLoading ? (
             <>
@@ -132,14 +132,14 @@ export const SongInputForm: React.FC<SongInputFormProps> = ({
 
       {/* Inline Feedback Messages */}
       {errorMessage && (
-        <p className="mt-2.5 text-xs text-rose-600 flex items-center gap-1.5 bg-rose-50 px-2.5 py-1.5 rounded-lg border border-rose-100">
+        <p className="mt-2.5 text-xs font-goga text-rose-600 flex items-center gap-1.5 bg-rose-50 px-2.5 py-1.5 rounded-lg border border-rose-100">
           <AlertCircle className="w-3.5 h-3.5 shrink-0" />
           <span>{errorMessage}</span>
         </p>
       )}
       {successMessage && (
-        <p className="mt-2.5 text-xs text-emerald-700 flex items-center gap-1.5 bg-emerald-50 px-2.5 py-1.5 rounded-lg border border-emerald-100">
-          <Check className="w-3.5 h-3.5 shrink-0 stroke-[2.5]" />
+        <p className="mt-2.5 text-xs font-goga text-emerald-700 flex items-center gap-1.5 bg-emerald-50 px-2.5 py-1.5 rounded-lg border border-emerald-100">
+          <Check className="w-3.5 h-3.5 stroke-[2.5] shrink-0" />
           <span>{successMessage}</span>
         </p>
       )}

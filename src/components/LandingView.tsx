@@ -3,6 +3,7 @@ import { CassetteTape } from './CassetteTape';
 import { CassetteCustomization } from '../types';
 import { Disc, ArrowRight, Play, User } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { PWAInstallButton } from './PWAInstallButton';
 
 interface LandingViewProps {
   onStartCreate: () => void;
@@ -48,41 +49,44 @@ export const LandingView: React.FC<LandingViewProps> = ({
           IT'S MY PLAYLIST
         </span>
 
-        {user ? (
-          <button
-            type="button"
-            id="hero-profile-avatar-btn"
-            onClick={onOpenDashboard}
-            title={user.displayName ? `${user.displayName}'s Mixtapes` : 'My Mixtapes Dashboard'}
-            aria-label="Open My Mixtapes Dashboard"
-            className="w-9 h-9 rounded-full border border-stone-300 hover:border-orange-500 bg-white p-0.5 shadow-2xs hover:shadow-xs transition cursor-pointer overflow-hidden flex items-center justify-center shrink-0"
-          >
-            {user.photoURL && !imageError ? (
-              <img
-                src={user.photoURL}
-                alt={user.displayName || 'User Profile'}
-                onError={() => setImageError(true)}
-                className="w-full h-full object-cover rounded-full"
-                referrerPolicy="no-referrer"
-              />
-            ) : (
-              <div className="w-full h-full rounded-full bg-orange-100 text-orange-900 font-bold text-xs flex items-center justify-center">
-                {(user.displayName?.[0] || user.email?.[0] || 'M').toUpperCase()}
-              </div>
-            )}
-          </button>
-        ) : (
-          <button
-            type="button"
-            id="hero-signin-icon-btn"
-            onClick={onGoToAccount}
-            title="Sign in with Google"
-            aria-label="Sign in with Google"
-            className="w-9 h-9 rounded-full border border-stone-300 hover:border-orange-500 bg-white hover:bg-stone-50 text-stone-700 hover:text-stone-900 shadow-2xs transition cursor-pointer flex items-center justify-center shrink-0"
-          >
-            <User className="w-4 h-4" />
-          </button>
-        )}
+        <div className="flex items-center gap-2">
+          <PWAInstallButton variant="header" />
+          {user ? (
+            <button
+              type="button"
+              id="hero-profile-avatar-btn"
+              onClick={onOpenDashboard}
+              title={user.displayName ? `${user.displayName}'s Mixtapes` : 'My Mixtapes Dashboard'}
+              aria-label="Open My Mixtapes Dashboard"
+              className="w-9 h-9 rounded-full border border-stone-300 hover:border-orange-500 bg-white p-0.5 shadow-2xs hover:shadow-xs transition cursor-pointer overflow-hidden flex items-center justify-center shrink-0"
+            >
+              {user.photoURL && !imageError ? (
+                <img
+                  src={user.photoURL}
+                  alt={user.displayName || 'User Profile'}
+                  onError={() => setImageError(true)}
+                  className="w-full h-full object-cover rounded-full"
+                  referrerPolicy="no-referrer"
+                />
+              ) : (
+                <div className="w-full h-full rounded-full bg-orange-100 text-orange-900 font-bold text-xs flex items-center justify-center">
+                  {(user.displayName?.[0] || user.email?.[0] || 'M').toUpperCase()}
+                </div>
+              )}
+            </button>
+          ) : (
+            <button
+              type="button"
+              id="hero-signin-icon-btn"
+              onClick={onGoToAccount}
+              title="Sign in with Google"
+              aria-label="Sign in with Google"
+              className="w-9 h-9 rounded-full border border-stone-300 hover:border-orange-500 bg-white hover:bg-stone-50 text-stone-700 hover:text-stone-900 shadow-2xs transition cursor-pointer flex items-center justify-center shrink-0"
+            >
+              <User className="w-4 h-4" />
+            </button>
+          )}
+        </div>
       </header>
 
       {/* CENTER: Label, Brand Heading, Subtitle, Compact Cassette */}

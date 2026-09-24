@@ -50,10 +50,10 @@ export const JCardNote: React.FC<JCardNoteProps> = ({
         <div className="flex items-center gap-1.5 sm:gap-2">
           <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-[#F54900]" />
           <div>
-            <span className="text-[8px] sm:text-[10px] font-mono-retro font-bold uppercase tracking-widest text-stone-500">
+            <span className="text-[8px] sm:text-[10px] font-remixa font-bold uppercase tracking-widest text-stone-500">
               CASSETTE INLAY J-CARD
             </span>
-            <h3 className="font-marker text-xs sm:text-lg text-stone-900 leading-tight">
+            <h3 className="font-azurio font-bold text-xs sm:text-base text-stone-900 leading-tight uppercase tracking-tight">
               {name || 'Mixtape Notes'}
             </h3>
           </div>
@@ -63,7 +63,7 @@ export const JCardNote: React.FC<JCardNoteProps> = ({
           type="button"
           id="toggle-jcard-btn"
           onClick={() => setIsExpanded(!isExpanded)}
-          className="p-1 rounded-lg hover:bg-orange-200/60 text-stone-600 transition"
+          className="p-1 rounded-lg hover:bg-orange-200/60 text-stone-600 transition cursor-pointer"
           title={isExpanded ? 'Collapse notes' : 'Expand notes'}
         >
           {isExpanded ? <ChevronUp className="w-3.5 h-3.5 sm:w-5 sm:h-5" /> : <ChevronDown className="w-3.5 h-3.5 sm:w-5 sm:h-5" />}
@@ -82,7 +82,7 @@ export const JCardNote: React.FC<JCardNoteProps> = ({
                   className="w-full h-full object-cover"
                 />
               </div>
-              <span className="text-[9px] sm:text-[10px] font-mono-retro text-stone-500 uppercase tracking-widest block text-center mt-1">
+              <span className="text-[9px] sm:text-[10px] font-remixa text-stone-500 uppercase tracking-widest block text-center mt-1">
                 Mixtape Artwork
               </span>
             </div>
@@ -93,15 +93,15 @@ export const JCardNote: React.FC<JCardNoteProps> = ({
             <div className="bg-white/80 border border-orange-200/80 rounded-lg sm:rounded-xl p-2 sm:p-3.5 shadow-xs relative">
               <div className="flex items-center gap-1.5 mb-1 text-stone-500">
                 <Mail className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#F54900]" />
-                <span className="text-[8px] sm:text-[10px] font-mono-retro font-bold uppercase tracking-wider">
+                <span className="text-[8px] sm:text-[10px] font-remixa font-bold uppercase tracking-wider">
                   Personal Message
                 </span>
               </div>
-              <p className="font-handwriting text-sm sm:text-2xl text-stone-800 leading-snug whitespace-pre-wrap">
+              <p className="font-emilio italic text-sm sm:text-xl text-stone-800 leading-snug whitespace-pre-wrap font-normal">
                 "{message}"
               </p>
               {creatorName && (
-                <p className="font-handwriting text-xs sm:text-lg text-[#F54900] text-right mt-0.5 sm:mt-1 font-bold">
+                <p className="font-emilio italic text-xs sm:text-base text-[#F54900] text-right mt-1 font-semibold">
                   — {creatorName}
                 </p>
               )}
@@ -111,18 +111,18 @@ export const JCardNote: React.FC<JCardNoteProps> = ({
           {/* Tracklist on J-card */}
           <div>
             <div className="flex items-center justify-between mb-1 sm:mb-2">
-              <span className="text-[9px] sm:text-[11px] font-mono-retro font-bold uppercase tracking-wider text-stone-600 flex items-center gap-1">
+              <span className="text-[9px] sm:text-[11px] font-goga font-bold uppercase tracking-wider text-stone-600 flex items-center gap-1">
                 <Music className="w-2.5 h-2.5 sm:w-3.5 sm:h-3.5 text-[#F54900]" />
                 Track List ({songs.length} / 5 songs)
               </span>
-              <span className="text-[8px] sm:text-[10px] font-mono-retro text-stone-400 flex items-center gap-1">
+              <span className="text-[8px] sm:text-[10px] font-remixa text-stone-400 flex items-center gap-1">
                 <Calendar className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
                 {formattedDate}
               </span>
             </div>
 
             {songs.length === 0 ? (
-              <p className="text-[11px] sm:text-xs font-mono-retro text-stone-400 italic text-center py-2 sm:py-3 bg-white/40 rounded-lg border border-dashed border-stone-300">
+              <p className="text-[11px] sm:text-xs font-goga text-stone-400 italic text-center py-2 sm:py-3 bg-white/40 rounded-lg border border-dashed border-stone-300">
                 No songs added to this tape yet.
               </p>
             ) : (
@@ -145,7 +145,7 @@ export const JCardNote: React.FC<JCardNoteProps> = ({
                     >
                       <div className="flex items-center gap-1.5 sm:gap-2 min-w-0 pr-1.5 sm:pr-2">
                         <span
-                          className={`w-4 h-4 sm:w-5 sm:h-5 rounded-md flex items-center justify-center font-mono-retro text-[9px] sm:text-[11px] shrink-0 ${
+                          className={`w-4 h-4 sm:w-5 sm:h-5 rounded-md flex items-center justify-center font-remixa text-[9px] sm:text-[11px] shrink-0 ${
                             isCurrent
                               ? 'bg-[#F54900] text-white font-bold'
                               : 'bg-stone-200 text-stone-600'
@@ -154,11 +154,11 @@ export const JCardNote: React.FC<JCardNoteProps> = ({
                           {isCurrent ? <Play className="w-2 h-2 sm:w-2.5 sm:h-2.5 fill-white" /> : idx + 1}
                         </span>
                         <div className="min-w-0 truncate">
-                          <p className="truncate font-medium text-stone-800 text-[11px] sm:text-xs">
+                          <p className="truncate font-goga font-medium text-stone-800 text-[11px] sm:text-xs">
                             {song.title}
                           </p>
                           {song.artist && (
-                            <p className="text-[9px] sm:text-[10px] font-mono-retro text-stone-500 truncate">
+                            <p className="text-[9px] sm:text-[10px] font-goga text-stone-500 truncate">
                               {song.artist}
                             </p>
                           )}

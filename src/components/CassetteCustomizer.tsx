@@ -442,10 +442,10 @@ export const CassetteCustomizer: React.FC<CassetteCustomizerProps> = ({
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 sm:gap-2.5 pb-1.5 sm:pb-2 border-b border-stone-200 mb-2 sm:mb-3 px-1">
         {/* Left: Progress Badge */}
         <div className="flex items-center justify-between sm:justify-start gap-2">
-          <span className="px-2 py-0.5 rounded-full bg-orange-50 border border-orange-200/90 font-mono-retro font-bold text-[11px] sm:text-xs text-orange-900 tracking-wider">
+          <span className="px-2 py-0.5 rounded-full bg-orange-50 border border-orange-200/90 font-remixa font-bold text-[11px] sm:text-xs text-orange-900 tracking-wider">
             0{activeIndex + 1} / 0{CATEGORIES.length}
           </span>
-          <span className="text-xs font-mono-retro font-semibold text-stone-600 uppercase tracking-wider hidden sm:inline">
+          <span className="text-xs font-goga font-semibold text-stone-600 uppercase tracking-wider hidden sm:inline">
             Customization Deck
           </span>
 
@@ -482,7 +482,7 @@ export const CassetteCustomizer: React.FC<CassetteCustomizerProps> = ({
                 type="button"
                 id={`cat-nav-${cat.id}`}
                 onClick={() => setActiveIndex(idx)}
-                className={`px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg text-[10px] sm:text-[11px] font-mono-retro tracking-wider uppercase transition flex items-center gap-1 ${
+                className={`px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg text-[10px] sm:text-[11px] font-goga tracking-wider uppercase transition flex items-center gap-1 ${
                   isActive
                     ? 'bg-[#F54900] text-white font-bold'
                     : 'text-stone-500 hover:text-stone-900 hover:bg-stone-100 font-medium'

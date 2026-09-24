@@ -56,17 +56,17 @@ export const TapeControls: React.FC<TapeControlsProps> = ({
       <div className="flex items-center justify-between gap-3 mb-2.5 sm:mb-3.5">
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2 mb-0.5 sm:mb-1">
-            <span className="text-[10px] sm:text-[11px] font-mono-retro font-semibold tracking-wider text-amber-400 uppercase">
+            <span className="text-[10px] sm:text-[11px] font-remixa font-semibold tracking-wider text-orange-400 uppercase">
               Track {totalTracks > 0 ? currentTrackIndex + 1 : 0} / {totalTracks}
             </span>
             {isPlaying && (
-              <span className="text-[9px] sm:text-[10px] font-mono-retro text-emerald-400 uppercase tracking-widest font-bold">
+              <span className="text-[9px] sm:text-[10px] font-remixa text-emerald-400 uppercase tracking-widest font-bold">
                 Playing
               </span>
             )}
           </div>
           <h3
-            className="font-sans font-semibold text-stone-100 text-xs sm:text-base truncate leading-tight"
+            className="font-goga font-semibold text-stone-100 text-xs sm:text-base truncate leading-tight"
             title={currentTrackTitle}
           >
             {currentTrackTitle || 'Select or add a track'}
@@ -77,9 +77,9 @@ export const TapeControls: React.FC<TapeControlsProps> = ({
         <div className="bg-stone-950/90 border border-stone-800/90 px-2 py-1 sm:px-2.5 sm:py-1.5 rounded-lg shrink-0 flex items-center gap-1">
           {isPlaying ? (
             <div className="flex items-end gap-1 h-3 sm:h-3.5">
-              <span className="w-1 bg-amber-400 rounded-full animate-pulse h-3 sm:h-3.5" />
-              <span className="w-1 bg-amber-400 rounded-full animate-ping h-1.5 sm:h-2" />
-              <span className="w-1 bg-amber-400 rounded-full animate-pulse h-2.5 sm:h-3" />
+              <span className="w-1 bg-[#F54900] rounded-full animate-pulse h-3 sm:h-3.5" />
+              <span className="w-1 bg-[#F54900] rounded-full animate-ping h-1.5 sm:h-2" />
+              <span className="w-1 bg-[#F54900] rounded-full animate-pulse h-2.5 sm:h-3" />
             </div>
           ) : (
             <div className="flex items-end gap-1 h-3 sm:h-3.5 opacity-30">
@@ -111,7 +111,7 @@ export const TapeControls: React.FC<TapeControlsProps> = ({
           />
         </div>
 
-        <div className="flex justify-between items-center mt-1 text-[11px] sm:text-xs font-mono-retro text-stone-400 tabular-nums">
+        <div className="flex justify-between items-center mt-1 text-[11px] sm:text-xs font-remixa text-stone-400 tabular-nums">
           <span>{formatTime(currentTime)}</span>
           <span>{formatTime(duration)}</span>
         </div>

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { Disc, LogOut, ArrowRight, ArrowLeft, AlertCircle } from 'lucide-react';
 import { MixtapeLoader, CassetteSpool } from './MixtapeLoader';
+import { PWAInstallButton } from './PWAInstallButton';
 
 interface AccountViewProps {
   onSuccessRedirect: () => void;
@@ -92,6 +93,8 @@ export const AccountView: React.FC<AccountViewProps> = ({ onSuccessRedirect, onG
               <span>Go to Your Mixtapes</span>
               <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
             </button>
+
+            <PWAInstallButton variant="card" />
 
             <button
               onClick={handleSignOut}

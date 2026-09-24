@@ -3,26 +3,63 @@
 @theme {
   --color-amber-500: #F54900;
   --color-amber-600: #F54900;
+
+  --font-azurio: 'Azurio', 'Syne', sans-serif;
+  --font-goga: 'Goga', 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-remixa: 'Remixa', 'Space Grotesk', sans-serif;
+  --font-emilio: 'Emilio', 'Cormorant Garamond', Georgia, serif;
 }
 
 @layer base {
   html, body {
-    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: 'Goga', 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     background-color: #FAF7F2;
     color: #171717;
   }
 }
 
 @layer utilities {
+  /* 1. AZURIO: Primary Display Font (Editorial, Distinctive, Bold) */
+  .font-azurio {
+    font-family: 'Azurio', 'Syne', sans-serif;
+    letter-spacing: -0.015em;
+  }
+
+  /* 2. GOGA: Primary UI Font (Clean, Modern, Highly Readable) */
+  .font-goga,
   .font-sans,
-  .font-serif-display,
-  .font-serif-accent,
-  .font-sans-ui,
-  .font-handwriting,
-  .font-marker,
+  .font-sans-ui {
+    font-family: 'Goga', 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+
+  /* 3. REMIXA: Accent Display Font (Small Editorial Labels, Category Badges, Accents) */
+  .font-remixa {
+    font-family: 'Remixa', 'Space Grotesk', sans-serif;
+    letter-spacing: 0.05em;
+  }
+
+  /* 4. EMILIO THIN ITALIC: Expressive Accent (Short Quotes, Editorial Phrases, Emotional Notes) */
+  .font-emilio {
+    font-family: 'Emilio', 'Cormorant Garamond', Georgia, serif;
+    font-style: italic;
+    font-weight: 300;
+    letter-spacing: 0.01em;
+  }
+
+  /* Retro Cassette Support Styles */
   .font-mono-retro,
   .font-lcd {
-    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: 'Remixa', 'Space Grotesk', monospace;
+  }
+  .font-serif-display {
+    font-family: 'Emilio', 'Cormorant Garamond', Georgia, serif;
+  }
+  .font-handwriting {
+    font-family: 'Emilio', 'Cormorant Garamond', Georgia, serif;
+    font-style: italic;
+  }
+  .font-marker {
+    font-family: 'Azurio', 'Syne', sans-serif;
   }
   /* Subtle physical drop shadow for cassette on warm paper */
   .shadow-cassette {

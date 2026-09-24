@@ -293,13 +293,13 @@ export const ListenerView: React.FC<ListenerViewProps> = ({
             type="button"
             id="listener-home-btn"
             onClick={onGoHome}
-            className="flex items-center gap-1.5 text-xs font-semibold text-stone-500 hover:text-stone-900 transition py-1 px-2.5 rounded-lg hover:bg-stone-200/50 cursor-pointer"
+            className="flex items-center gap-1.5 text-xs font-azurio font-extrabold text-stone-700 hover:text-stone-900 uppercase tracking-wider transition py-1 px-2.5 rounded-lg hover:bg-stone-200/50 cursor-pointer"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             <span>IT'S MY PLAYLIST</span>
           </button>
         ) : (
-          <div className="flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-stone-900">
+          <div className="flex items-center gap-1.5 text-xs font-azurio font-extrabold uppercase tracking-wider text-stone-900">
             <Disc className="w-3.5 h-3.5 text-orange-600" />
             <span>IT'S MY PLAYLIST</span>
           </div>
@@ -311,7 +311,7 @@ export const ListenerView: React.FC<ListenerViewProps> = ({
               type="button"
               id="listener-edit-tape-btn"
               onClick={() => onEditTape(mixtape)}
-              className="flex items-center gap-1 text-[11px] font-semibold text-stone-700 bg-white border border-stone-200 hover:bg-stone-50 px-2.5 py-1 rounded-lg shadow-2xs transition cursor-pointer"
+              className="flex items-center gap-1 text-[11px] font-goga font-semibold text-stone-700 bg-white border border-stone-200 hover:bg-stone-50 px-2.5 py-1 rounded-lg shadow-2xs transition cursor-pointer"
             >
               <span>Edit Tape</span>
             </button>
@@ -321,7 +321,7 @@ export const ListenerView: React.FC<ListenerViewProps> = ({
             type="button"
             id="listener-share-btn"
             onClick={handleCopyLink}
-            className="flex items-center gap-1 text-[11px] font-semibold text-stone-700 hover:text-stone-900 bg-white border border-stone-200 px-2.5 py-1 rounded-lg shadow-2xs transition cursor-pointer"
+            className="flex items-center gap-1 text-[11px] font-goga font-semibold text-stone-700 hover:text-stone-900 bg-white border border-stone-200 px-2.5 py-1 rounded-lg shadow-2xs transition cursor-pointer"
           >
             {copiedShare ? (
               <>
@@ -396,7 +396,7 @@ export const ListenerView: React.FC<ListenerViewProps> = ({
           type="button"
           id="listener-play-pause-btn"
           onClick={handleTogglePlay}
-          className="w-full sm:w-auto min-w-[220px] py-3.5 px-8 bg-orange-600 hover:bg-orange-700 active:bg-orange-800 text-white rounded-xl text-xs sm:text-sm font-bold uppercase tracking-wider shadow-sm transition inline-flex items-center justify-center gap-2 cursor-pointer"
+          className="w-full sm:w-auto min-w-[220px] py-3.5 px-8 bg-orange-600 hover:bg-orange-700 active:bg-orange-800 text-white rounded-xl text-xs sm:text-sm font-goga font-bold uppercase tracking-wider shadow-sm transition inline-flex items-center justify-center gap-2 cursor-pointer"
         >
           {isPlaying ? (
             <>
@@ -416,7 +416,7 @@ export const ListenerView: React.FC<ListenerViewProps> = ({
           type="button"
           id="listener-make-own-btn"
           onClick={onMakeYourOwn}
-          className="w-full sm:w-auto py-2.5 px-4 bg-white hover:bg-stone-50 border border-stone-200 text-stone-700 hover:text-stone-900 rounded-xl text-xs font-semibold uppercase tracking-wider shadow-2xs transition inline-flex items-center justify-center gap-1.5 cursor-pointer"
+          className="w-full sm:w-auto py-2.5 px-4 bg-white hover:bg-stone-50 border border-stone-200 text-stone-700 hover:text-stone-900 rounded-xl text-xs font-goga font-semibold uppercase tracking-wider shadow-2xs transition inline-flex items-center justify-center gap-1.5 cursor-pointer"
         >
           <Plus className="w-3.5 h-3.5 text-stone-500" />
           <span>RECORD YOUR OWN MIXTAPE</span>

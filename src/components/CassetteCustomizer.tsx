@@ -27,14 +27,17 @@ interface CassetteCustomizerProps {
 }
 
 const AVAILABLE_COLORS: { id: CassetteColor; label: string; swatch: string; accentBorder: string }[] = [
-  { id: 'vintage-ivory', label: 'Vintage Ivory', swatch: 'bg-[#e8dec8]', accentBorder: 'border-[#c7b99c]' },
-  { id: 'sunset-amber', label: 'Sunset Amber', swatch: 'bg-[#ea7035]', accentBorder: 'border-[#bd4e1a]' },
-  { id: 'neon-magenta', label: 'Neon Magenta', swatch: 'bg-[#e03d7c]', accentBorder: 'border-[#b5265e]' },
-  { id: 'synth-teal', label: 'Synth Teal', swatch: 'bg-[#188a8d]', accentBorder: 'border-[#0f6063]' },
-  { id: 'matte-black', label: 'Matte Black', swatch: 'bg-[#292828]', accentBorder: 'border-[#181818]' },
-  { id: 'lavender-mist', label: 'Lavender Mist', swatch: 'bg-[#9888b5]', accentBorder: 'border-[#756691]' },
-  { id: 'cherry-red', label: 'Cherry Red', swatch: 'bg-[#c52b2b]', accentBorder: 'border-[#991b1b]' },
-  { id: 'clear-smoke', label: 'Clear Smoke', swatch: 'bg-[#42484d]', accentBorder: 'border-[#2b2f33]' }
+  { id: 'vintage-ivory', label: 'Cream', swatch: 'bg-[#e8dec8]', accentBorder: 'border-[#c7b99c]' },
+  { id: 'matte-black', label: 'Black', swatch: 'bg-[#292828]', accentBorder: 'border-[#181818]' },
+  { id: 'pastel-pink', label: 'Pastel Pink', swatch: 'bg-[#f4dcd6]', accentBorder: 'border-[#dfbdb4]' },
+  { id: 'matcha-green', label: 'Matcha Green', swatch: 'bg-[#d2d9c4]', accentBorder: 'border-[#b5bea5]' },
+  { id: 'lavender-mist', label: 'Lavender', swatch: 'bg-[#9888b5]', accentBorder: 'border-[#756691]' },
+  { id: 'sky-blue', label: 'Sky Blue', swatch: 'bg-[#cbe1ea]', accentBorder: 'border-[#aec7d2]' },
+  { id: 'sunset-amber', label: 'Amber', swatch: 'bg-[#ea7035]', accentBorder: 'border-[#bd4e1a]' },
+  { id: 'neon-magenta', label: 'Magenta', swatch: 'bg-[#e03d7c]', accentBorder: 'border-[#b5265e]' },
+  { id: 'synth-teal', label: 'Teal', swatch: 'bg-[#188a8d]', accentBorder: 'border-[#0f6063]' },
+  { id: 'cherry-red', label: 'Cherry', swatch: 'bg-[#c52b2b]', accentBorder: 'border-[#991b1b]' },
+  { id: 'clear-smoke', label: 'Smoke', swatch: 'bg-[#42484d]', accentBorder: 'border-[#2b2f33]' }
 ];
 
 const AVAILABLE_SCREWS: { id: 'silver' | 'gold' | 'black'; label: string; bg: string }[] = [
@@ -79,38 +82,49 @@ const AVAILABLE_PATTERNS: { id: CassettePattern; label: string; desc: string; pr
 
 const AVAILABLE_LABEL_STYLES: { id: LabelStyle; label: string; previewText: string; previewClass: string; desc: string }[] = [
   {
-    id: 'marker',
-    label: 'Sharpie Marker',
+    id: 'editorial-serif',
+    label: 'Minimal Serif',
     previewText: 'Mixtape Side A',
-    previewClass: 'font-marker text-lg text-stone-900',
-    desc: 'Bold ink marker on paper label'
+    previewClass: 'font-serif-display text-base text-stone-900 font-medium',
+    desc: 'Refined editorial book serif typography'
   },
   {
-    id: 'handwritten',
-    label: 'Handwritten Script',
-    previewText: 'Mixtape Side A',
-    previewClass: 'font-handwriting text-xl text-stone-800',
-    desc: 'Cursive love letter handwriting'
+    id: 'bold-mono',
+    label: 'Retro Sans',
+    previewText: 'TAPE-01 // SIDE A',
+    previewClass: 'font-mono-retro font-black tracking-widest text-sm text-stone-900 uppercase',
+    desc: 'Crisp industrial studio sans-serif stamping'
   },
   {
     id: 'typewriter',
-    label: 'Vintage Typewriter',
+    label: 'Typewriter',
     previewText: 'MIXTAPE [SIDE A]',
     previewClass: 'font-mono-retro text-sm font-semibold tracking-wider text-stone-800',
     desc: 'Mechanical ink typewriter impression'
   },
   {
-    id: 'bold-mono',
-    label: 'Industrial Mono',
-    previewText: 'TAPE-01 // SIDE A',
-    previewClass: 'font-mono-retro font-black tracking-widest text-sm text-stone-900 uppercase',
-    desc: 'Heavy hi-fi studio lab stamping'
+    id: 'handwritten',
+    label: 'Handwriting',
+    previewText: 'Mixtape Side A',
+    previewClass: 'font-handwriting text-xl text-stone-800',
+    desc: 'Cursive love letter handwriting'
+  },
+  {
+    id: 'marker',
+    label: 'Ink Marker',
+    previewText: 'Mixtape Side A',
+    previewClass: 'font-marker text-lg text-stone-900',
+    desc: 'Bold ink marker on paper label'
   }
 ];
 
 const AVAILABLE_STICKERS: { type: StickerType; label: string }[] = [
-  { type: 'mix-vol-1', label: 'Mix Vol. 1' },
+  { type: 'stamp-editorial', label: 'Subtle Stamp' },
+  { type: 'tape-lines', label: 'Tape Lines' },
+  { type: 'star', label: 'Star' },
   { type: 'heart', label: 'Heart' },
+  { type: 'barcode', label: 'Barcode' },
+  { type: 'mix-vol-1', label: 'Mix Vol. 1' },
   { type: 'side-a', label: 'Side A' },
   { type: 'do-not-erase', label: "Don't Erase" },
   { type: 'lo-fi', label: 'Lo-Fi' },
@@ -428,7 +442,7 @@ export const CassetteCustomizer: React.FC<CassetteCustomizerProps> = ({
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 sm:gap-2.5 pb-1.5 sm:pb-2 border-b border-stone-200 mb-2 sm:mb-3 px-1">
         {/* Left: Progress Badge */}
         <div className="flex items-center justify-between sm:justify-start gap-2">
-          <span className="px-2 py-0.5 rounded-full bg-amber-100 border border-amber-300/80 font-mono-retro font-bold text-[11px] sm:text-xs text-amber-900 tracking-wider shadow-2xs">
+          <span className="px-2 py-0.5 rounded-full bg-orange-50 border border-orange-200/90 font-mono-retro font-bold text-[11px] sm:text-xs text-orange-900 tracking-wider">
             0{activeIndex + 1} / 0{CATEGORIES.length}
           </span>
           <span className="text-xs font-mono-retro font-semibold text-stone-600 uppercase tracking-wider hidden sm:inline">
@@ -441,7 +455,7 @@ export const CassetteCustomizer: React.FC<CassetteCustomizerProps> = ({
               type="button"
               onClick={goToPrev}
               disabled={activeIndex === 0}
-              className="w-6 h-6 rounded-lg border border-stone-300 bg-white hover:bg-stone-50 active:bg-stone-100 disabled:opacity-30 disabled:pointer-events-none flex items-center justify-center text-stone-600 shadow-2xs transition"
+              className="w-6 h-6 rounded-lg border border-stone-300 bg-white hover:bg-stone-50 active:bg-stone-100 disabled:opacity-30 disabled:pointer-events-none flex items-center justify-center text-stone-600 transition"
               title="Previous Card (←)"
             >
               <ChevronLeft className="w-3.5 h-3.5" />
@@ -450,7 +464,7 @@ export const CassetteCustomizer: React.FC<CassetteCustomizerProps> = ({
               type="button"
               onClick={goToNext}
               disabled={activeIndex === CATEGORIES.length - 1}
-              className="w-6 h-6 rounded-lg border border-stone-300 bg-white hover:bg-stone-50 active:bg-stone-100 disabled:opacity-30 disabled:pointer-events-none flex items-center justify-center text-stone-600 shadow-2xs transition"
+              className="w-6 h-6 rounded-lg border border-stone-300 bg-white hover:bg-stone-50 active:bg-stone-100 disabled:opacity-30 disabled:pointer-events-none flex items-center justify-center text-stone-600 transition"
               title="Next Card (→)"
             >
               <ChevronRight className="w-3.5 h-3.5" />
@@ -470,7 +484,7 @@ export const CassetteCustomizer: React.FC<CassetteCustomizerProps> = ({
                 onClick={() => setActiveIndex(idx)}
                 className={`px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg text-[10px] sm:text-[11px] font-mono-retro tracking-wider uppercase transition flex items-center gap-1 ${
                   isActive
-                    ? 'bg-amber-600 text-white font-bold shadow-xs'
+                    ? 'bg-[#F54900] text-white font-bold'
                     : 'text-stone-500 hover:text-stone-900 hover:bg-stone-100 font-medium'
                 }`}
               >
@@ -489,7 +503,7 @@ export const CassetteCustomizer: React.FC<CassetteCustomizerProps> = ({
             type="button"
             onClick={goToPrev}
             disabled={activeIndex === 0}
-            className="w-7 h-7 rounded-lg border border-stone-300 bg-white hover:bg-stone-50 active:bg-stone-100 disabled:opacity-30 disabled:pointer-events-none flex items-center justify-center text-stone-600 shadow-2xs transition"
+            className="w-7 h-7 rounded-lg border border-stone-300 bg-white hover:bg-stone-50 active:bg-stone-100 disabled:opacity-30 disabled:pointer-events-none flex items-center justify-center text-stone-600 transition"
             title="Previous Card (←)"
           >
             <ChevronLeft className="w-4 h-4" />
@@ -498,7 +512,7 @@ export const CassetteCustomizer: React.FC<CassetteCustomizerProps> = ({
             type="button"
             onClick={goToNext}
             disabled={activeIndex === CATEGORIES.length - 1}
-            className="w-7 h-7 rounded-lg border border-stone-300 bg-white hover:bg-stone-50 active:bg-stone-100 disabled:opacity-30 disabled:pointer-events-none flex items-center justify-center text-stone-600 shadow-2xs transition"
+            className="w-7 h-7 rounded-lg border border-stone-300 bg-white hover:bg-stone-50 active:bg-stone-100 disabled:opacity-30 disabled:pointer-events-none flex items-center justify-center text-stone-600 transition"
             title="Next Card (→)"
           >
             <ChevronRight className="w-4 h-4" />
@@ -556,22 +570,22 @@ export const CassetteCustomizer: React.FC<CassetteCustomizerProps> = ({
                 left: '50%',
                 transition: isDragging
                   ? 'none'
-                  : 'transform 480ms cubic-bezier(0.16, 1, 0.3, 1), opacity 440ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 480ms cubic-bezier(0.16, 1, 0.3, 1), border-color 300ms ease'
+                  : 'transform 480ms cubic-bezier(0.16, 1, 0.3, 1), opacity 440ms cubic-bezier(0.16, 1, 0.3, 1), border-color 300ms ease'
               }}
-              className={`absolute top-1 bottom-1 rounded-xl sm:rounded-2xl border-2 flex flex-col justify-between overflow-hidden ${
+              className={`absolute top-1 bottom-1 rounded-xl sm:rounded-2xl border-2 flex flex-col justify-between overflow-hidden shadow-soft-card ${
                 isCurrentActive
-                  ? 'bg-stone-50 border-amber-600/70 shadow-2xl shadow-stone-900/20 ring-1 ring-amber-500/20 cursor-default'
-                  : 'bg-stone-100/95 border-stone-300 shadow-md hover:border-amber-400/80 cursor-pointer hover:shadow-lg'
+                  ? 'bg-stone-50 border-[#F54900] ring-1 ring-[#F54900]/20 cursor-default'
+                  : 'bg-stone-100/95 border-stone-300 hover:border-[#F54900]/60 cursor-pointer'
               }`}
             >
               {/* Card Top Stamp: Category Number, Icon & Title */}
               <div className="p-2 sm:p-4 border-b border-stone-200/90 bg-gradient-to-b from-stone-100 to-stone-50/70 shrink-0">
                 <div className="flex items-center justify-between gap-2 mb-0.5 sm:mb-1">
                   <div className="flex items-center gap-1.5">
-                    <span className="w-4 h-4 sm:w-5 sm:h-5 rounded-md bg-amber-600 text-white flex items-center justify-center font-mono-retro font-bold text-[9px] sm:text-[10px]">
+                    <span className="w-4 h-4 sm:w-5 sm:h-5 rounded-md bg-[#F54900] text-white flex items-center justify-center font-mono-retro font-bold text-[9px] sm:text-[10px]">
                       {cat.num}
                     </span>
-                    <span className="text-[9px] sm:text-[11px] font-mono-retro font-bold uppercase tracking-widest text-amber-800">
+                    <span className="text-[9px] sm:text-[11px] font-mono-retro font-bold uppercase tracking-widest text-[#F54900]">
                       CARD {cat.num} • {cat.label}
                     </span>
                   </div>
@@ -614,7 +628,7 @@ export const CassetteCustomizer: React.FC<CassetteCustomizerProps> = ({
                         <span className="text-xs font-mono-retro font-bold uppercase tracking-wider text-stone-700">
                           Shell Color ({AVAILABLE_COLORS.length})
                         </span>
-                        <span className="text-[11px] font-mono-retro text-amber-700 capitalize font-medium">
+                        <span className="text-[11px] font-mono-retro text-[#F54900] capitalize font-medium">
                           {AVAILABLE_COLORS.find((c) => c.id === customization.color)?.label}
                         </span>
                       </div>
@@ -633,7 +647,7 @@ export const CassetteCustomizer: React.FC<CassetteCustomizerProps> = ({
                               }}
                               className={`flex flex-col items-center p-2 rounded-xl border-2 transition ${
                                 isSelected
-                                  ? 'border-amber-600 bg-amber-50 shadow-xs ring-1 ring-amber-500 scale-[1.02]'
+                                  ? 'border-[#F54900] bg-orange-50 ring-1 ring-[#F54900] scale-[1.02]'
                                   : 'border-stone-200 hover:border-stone-400 bg-white'
                               }`}
                             >
@@ -672,7 +686,7 @@ export const CassetteCustomizer: React.FC<CassetteCustomizerProps> = ({
                               }}
                               className={`flex items-center justify-center gap-2 py-1.5 px-2 rounded-xl border-2 transition ${
                                 isSelected
-                                  ? 'border-amber-600 bg-amber-50 text-stone-900 font-bold ring-1 ring-amber-500'
+                                  ? 'border-[#F54900] bg-orange-50 text-stone-900 font-bold ring-1 ring-[#F54900]'
                                   : 'border-stone-200 bg-white text-stone-600 hover:border-stone-300'
                               }`}
                             >
@@ -699,7 +713,7 @@ export const CassetteCustomizer: React.FC<CassetteCustomizerProps> = ({
                       <span className="text-xs font-mono-retro font-bold uppercase tracking-wider text-stone-700">
                         Texture Options
                       </span>
-                      <span className="text-[11px] font-mono-retro text-amber-700 capitalize font-medium">
+                      <span className="text-[11px] font-mono-retro text-[#F54900] capitalize font-medium">
                         {AVAILABLE_PATTERNS.find((p) => p.id === customization.pattern)?.label}
                       </span>
                     </div>
@@ -718,7 +732,7 @@ export const CassetteCustomizer: React.FC<CassetteCustomizerProps> = ({
                             }}
                             className={`p-2.5 rounded-xl border-2 transition text-left flex flex-col justify-between min-h-[72px] ${
                               isSelected
-                                ? 'border-amber-600 bg-amber-50 shadow-xs ring-1 ring-amber-500'
+                                ? 'border-[#F54900] bg-orange-50 ring-1 ring-[#F54900]'
                                 : 'border-stone-200 hover:border-stone-400 bg-white text-stone-800'
                             }`}
                           >
@@ -727,12 +741,12 @@ export const CassetteCustomizer: React.FC<CassetteCustomizerProps> = ({
                                 {p.label}
                               </span>
                               {isSelected && (
-                                <Check className="w-3.5 h-3.5 text-amber-700 shrink-0" />
+                                <Check className="w-3.5 h-3.5 text-[#F54900] shrink-0" />
                               )}
                             </div>
 
                             <div
-                              className={`w-full h-5 rounded-md border border-stone-300 shadow-2xs ${p.previewClass}`}
+                              className={`w-full h-5 rounded-md border border-stone-300 ${p.previewClass}`}
                             />
                             <span className="text-[9px] font-sans text-stone-500 mt-1 truncate">
                               {p.desc}
@@ -753,7 +767,7 @@ export const CassetteCustomizer: React.FC<CassetteCustomizerProps> = ({
                       <span className="text-xs font-mono-retro font-bold uppercase tracking-wider text-stone-700">
                         Typography Style
                       </span>
-                      <span className="text-[11px] font-mono-retro text-amber-700 font-medium">
+                      <span className="text-[11px] font-mono-retro text-[#F54900] font-medium">
                         {AVAILABLE_LABEL_STYLES.find((f) => f.id === customization.labelStyle)?.label}
                       </span>
                     </div>
@@ -772,7 +786,7 @@ export const CassetteCustomizer: React.FC<CassetteCustomizerProps> = ({
                             }}
                             className={`w-full p-3 rounded-xl border-2 transition text-left flex items-center justify-between ${
                               isSelected
-                                ? 'border-amber-600 bg-amber-50/90 shadow-xs ring-1 ring-amber-500'
+                                ? 'border-[#F54900] bg-orange-50/90 ring-1 ring-[#F54900]'
                                 : 'border-stone-200 hover:border-stone-400 bg-white text-stone-700'
                             }`}
                           >
@@ -793,7 +807,7 @@ export const CassetteCustomizer: React.FC<CassetteCustomizerProps> = ({
                             <div
                               className={`w-5 h-5 rounded-full border flex items-center justify-center shrink-0 ${
                                 isSelected
-                                  ? 'bg-amber-600 border-amber-700 text-white'
+                                  ? 'bg-[#F54900] border-[#F54900] text-white'
                                   : 'border-stone-300 bg-stone-50'
                               }`}
                             >
@@ -816,7 +830,7 @@ export const CassetteCustomizer: React.FC<CassetteCustomizerProps> = ({
                         <span className="text-xs font-mono-retro font-bold uppercase tracking-wider text-stone-700">
                           Badges Attached:
                         </span>
-                        <span className="px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 font-mono-retro text-[10px] font-bold">
+                        <span className="px-2 py-0.5 rounded-full bg-orange-50 border border-orange-200 text-orange-900 font-mono-retro text-[10px] font-bold">
                           {customization.stickers?.length || 0} / 4
                         </span>
                       </div>
@@ -854,7 +868,7 @@ export const CassetteCustomizer: React.FC<CassetteCustomizerProps> = ({
                             }}
                             className={`p-2 rounded-xl border-2 transition flex items-center justify-between gap-1.5 ${
                               isAttached
-                                ? 'border-amber-600 bg-amber-100 text-stone-900 font-semibold shadow-xs'
+                                ? 'border-[#F54900] bg-orange-100 text-stone-900 font-semibold'
                                 : isMaxReached
                                 ? 'border-stone-200 bg-stone-100 text-stone-400 opacity-50 cursor-not-allowed'
                                 : 'border-stone-200 bg-white text-stone-700 hover:border-stone-400'
@@ -883,7 +897,7 @@ export const CassetteCustomizer: React.FC<CassetteCustomizerProps> = ({
               {/* Card Bottom Ribbon: Navigation Footprint */}
               <div className="px-3 py-1.5 sm:px-4 sm:py-2 border-t border-stone-200 bg-stone-100/80 flex items-center justify-between text-[9px] sm:text-[10px] font-mono-retro text-stone-500 shrink-0">
                 <span>Mixtape Studio Design Spec</span>
-                <span className="text-amber-800 font-bold uppercase">
+                <span className="text-[#F54900] font-bold uppercase">
                   {cat.label} • 0{i + 1}
                 </span>
               </div>
@@ -906,7 +920,7 @@ export const CassetteCustomizer: React.FC<CassetteCustomizerProps> = ({
               onClick={() => setActiveIndex(idx)}
               className={`transition-all duration-300 rounded-full ${
                 activeIndex === idx
-                  ? 'w-5 sm:w-6 h-1.5 sm:h-2 bg-amber-600 shadow-xs'
+                  ? 'w-5 sm:w-6 h-1.5 sm:h-2 bg-[#F54900]'
                   : 'w-1.5 sm:w-2 h-1.5 sm:h-2 bg-stone-300 hover:bg-stone-400'
               }`}
               title={`Jump to ${cat.label}`}

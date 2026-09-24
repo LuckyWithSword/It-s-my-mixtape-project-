@@ -12,6 +12,7 @@ interface CassetteTapeProps {
   onFlip?: () => void;
   className?: string;
   compact?: boolean;
+  noShadow?: boolean;
 }
 
 // Color schemes for cassette shell
@@ -51,12 +52,33 @@ export const SHELL_COLORS: Record<string, { bg: string; border: string; accent: 
     shadow: 'shadow-black/40',
     labelBg: 'bg-[#f4f4f4]'
   },
+  'pastel-pink': {
+    bg: 'bg-[#f4dcd6]',
+    border: 'border-[#dfbdb4]',
+    accent: 'bg-[#6b4742]',
+    shadow: 'shadow-rose-950/20',
+    labelBg: 'bg-[#fdf6f5]'
+  },
+  'matcha-green': {
+    bg: 'bg-[#d2d9c4]',
+    border: 'border-[#b5bea5]',
+    accent: 'bg-[#434b35]',
+    shadow: 'shadow-stone-950/20',
+    labelBg: 'bg-[#f8faf4]'
+  },
   'lavender-mist': {
     bg: 'bg-[#9888b5]',
     border: 'border-[#756691]',
     accent: 'bg-[#3b2d52]',
     shadow: 'shadow-purple-950/25',
     labelBg: 'bg-[#f8f5fc]'
+  },
+  'sky-blue': {
+    bg: 'bg-[#cbe1ea]',
+    border: 'border-[#aec7d2]',
+    accent: 'bg-[#344d57]',
+    shadow: 'shadow-sky-950/20',
+    labelBg: 'bg-[#f4fafc]'
   },
   'cherry-red': {
     bg: 'bg-[#c52b2b]',
@@ -77,6 +99,36 @@ export const SHELL_COLORS: Record<string, { bg: string; border: string; accent: 
 // Render sticker graphics
 export const StickerRenderer: React.FC<{ type: StickerType }> = ({ type }) => {
   switch (type) {
+    case 'stamp-editorial':
+      return (
+        <span className="inline-block px-1.5 py-0.5 border border-stone-800 text-stone-900 bg-white/95 font-mono-retro text-[9px] tracking-widest uppercase select-none shadow-2xs">
+          REC. Nº 04
+        </span>
+      );
+    case 'tape-lines':
+      return (
+        <span className="inline-block w-10 h-3 bg-amber-200/50 border border-amber-300/60 backdrop-blur-2xs select-none rotate-2 shadow-2xs" />
+      );
+    case 'star':
+      return (
+        <span className="inline-flex items-center justify-center w-5 h-5 bg-stone-900 text-white rounded-full select-none shadow-2xs">
+          <Star className="w-3 h-3 fill-white" />
+        </span>
+      );
+    case 'barcode':
+      return (
+        <div className="inline-flex flex-col items-center bg-white px-1 py-0.5 border border-stone-300 select-none shadow-2xs">
+          <div className="flex items-stretch h-3 gap-[1px]">
+            <span className="w-0.5 bg-stone-900" />
+            <span className="w-1 bg-stone-900" />
+            <span className="w-0.5 bg-stone-900" />
+            <span className="w-1.5 bg-stone-900" />
+            <span className="w-0.5 bg-stone-900" />
+            <span className="w-1 bg-stone-900" />
+          </div>
+          <span className="text-[6px] font-mono-retro text-stone-600 tracking-tighter">704-89</span>
+        </div>
+      );
     case 'mix-vol-1':
       return (
         <span className="inline-block px-2 py-0.5 bg-yellow-300 text-stone-900 border border-stone-900 font-marker text-xs shadow-xs uppercase tracking-wider select-none">
@@ -151,13 +203,16 @@ export const CassetteTape: React.FC<CassetteTapeProps> = ({
   side = 'A',
   onFlip,
   className = '',
-  compact = false
+  compact = false,
+  noShadow = false
 }) => {
   const shell = SHELL_COLORS[customization.color] || SHELL_COLORS['vintage-ivory'];
 
   // Font style for the label
   const getFontClass = (style: string) => {
     switch (style) {
+      case 'editorial-serif':
+        return 'font-serif-display font-medium tracking-normal text-stone-900';
       case 'marker':
         return 'font-marker tracking-wide text-stone-900';
       case 'handwritten':
@@ -200,7 +255,9 @@ export const CassetteTape: React.FC<CassetteTapeProps> = ({
       {/* Main Outer Cassette Shell */}
       <div
         id="cassette-body"
-        className={`relative w-full aspect-[1.6/1] max-w-[268px] sm:max-w-[420px] mx-auto rounded-xl sm:rounded-2xl border-3 sm:border-4 p-1.5 sm:p-3.5 shadow-lg sm:shadow-xl flex flex-col justify-between overflow-hidden ${shell.bg} ${shell.border} ${shell.shadow}`}
+        className={`relative w-full aspect-[1.6/1] max-w-[268px] sm:max-w-[420px] mx-auto rounded-xl sm:rounded-2xl border-3 sm:border-4 p-1.5 sm:p-3.5 ${
+          noShadow ? 'shadow-none' : `shadow-lg sm:shadow-xl ${shell.shadow}`
+        } flex flex-col justify-between overflow-hidden ${shell.bg} ${shell.border}`}
       >
         {/* Subtle retro patterns on the shell */}
         {customization.pattern === 'retro-stripes' && (

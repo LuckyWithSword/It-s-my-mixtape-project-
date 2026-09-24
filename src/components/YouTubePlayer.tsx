@@ -15,6 +15,8 @@ interface YouTubePlayerProps {
   onPlayStateChange: (playing: boolean) => void;
   onSongEnded: () => void;
   onProgressUpdate: (currentTime: number, duration: number) => void;
+  seekTime?: number | null;
+  onSeekHandled?: () => void;
   onErrorNotice?: (msg: string) => void;
   isDeckExpanded?: boolean;
   onToggleDeckExpand?: () => void;
@@ -26,6 +28,8 @@ export const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
   onPlayStateChange,
   onSongEnded,
   onProgressUpdate,
+  seekTime,
+  onSeekHandled,
   onErrorNotice,
 }) => {
   const playerRef = useRef<any>(null);
@@ -85,9 +89,11 @@ export const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
     try {
       playerRef.current = new window.YT.Player(playerId, {
         videoId: currentSong.youtubeId,
+        width: '240',
+        height: '135',
         playerVars: {
           autoplay: isPlaying ? 1 : 0,
-          controls: 1,
+          controls: 0,
           rel: 0,
           playsinline: 1,
           enablejsapi: 1,
@@ -110,8 +116,7 @@ export const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
             } else if (state === 2) {
               onPlayStateChange(false);
             } else if (state === 0) {
-              // Video finished! Automatically go to next song
-              onPlayStateChange(false);
+              // Video finished! Automatically advance to next song
               onSongEnded();
             }
           },
@@ -156,6 +161,20 @@ export const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
     }
   }, [isPlaying, isPlayerReady]);
 
+  // Handle seek request
+  useEffect(() => {
+    if (seekTime !== null && seekTime !== undefined && playerRef.current && isPlayerReady) {
+      try {
+        if (typeof playerRef.current.seekTo === 'function') {
+          playerRef.current.seekTo(seekTime, true);
+        }
+      } catch (err) {
+        console.warn('Error seeking in YouTube player:', err);
+      }
+      onSeekHandled?.();
+    }
+  }, [seekTime, isPlayerReady, onSeekHandled]);
+
   // Progress polling
   useEffect(() => {
     if (progressIntervalRef.current) {
@@ -189,9 +208,9 @@ export const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
 
   return (
     <>
-      {/* Hidden YouTube audio playback engine */}
+      {/* YouTube audio playback engine container with valid layout dimensions to prevent Chrome treating it as a hidden/invisible pixel */}
       <div
-        className="fixed -left-[9999px] -top-[9999px] w-[200px] h-[200px] opacity-0 pointer-events-none overflow-hidden"
+        className="fixed bottom-0 right-0 w-[240px] h-[135px] opacity-[0.01] pointer-events-none overflow-hidden -z-50"
         aria-hidden="true"
         tabIndex={-1}
       >

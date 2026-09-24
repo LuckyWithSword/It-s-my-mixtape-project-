@@ -1,17 +1,38 @@
 @import "tailwindcss";
 
+@theme {
+  --color-amber-500: #F54900;
+  --color-amber-600: #F54900;
+}
+
+@layer base {
+  html, body {
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: #FAF7F2;
+    color: #171717;
+  }
+}
+
 @layer utilities {
-  .font-handwriting {
-    font-family: 'Caveat', cursive;
-  }
-  .font-marker {
-    font-family: 'Permanent Marker', cursive;
-  }
-  .font-mono-retro {
-    font-family: 'Space Mono', monospace;
-  }
+  .font-sans,
+  .font-serif-display,
+  .font-serif-accent,
+  .font-sans-ui,
+  .font-handwriting,
+  .font-marker,
+  .font-mono-retro,
   .font-lcd {
-    font-family: 'VT323', monospace;
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+  /* Subtle physical drop shadow for cassette on warm paper */
+  .shadow-cassette {
+    box-shadow: 0 16px 32px -8px rgba(35, 25, 15, 0.16), 0 4px 12px -2px rgba(35, 25, 15, 0.08);
+  }
+  .shadow-cassette-floating {
+    box-shadow: 0 24px 44px -10px rgba(35, 25, 15, 0.22), 0 8px 18px -4px rgba(35, 25, 15, 0.10);
+  }
+  .shadow-soft-card {
+    box-shadow: 0 2px 8px -2px rgba(40, 30, 20, 0.05), 0 1px 3px 0 rgba(40, 30, 20, 0.03);
   }
 }
 
@@ -33,4 +54,41 @@
   animation: spin-spool 1.8s linear infinite;
   will-change: transform;
 }
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Accessibility: Respect prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  .animate-spool-slow,
+  .animate-spool-fast,
+  .animate-spin,
+  .animate-ping,
+  .animate-fadeIn {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* Custom horizontal scrollbar hide */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
 

@@ -6,6 +6,7 @@ interface JCardNoteProps {
   name: string;
   creatorName?: string;
   message?: string;
+  imageUrl?: string | null;
   songs: Song[];
   createdAt?: string;
   currentSongIndex?: number;
@@ -18,6 +19,7 @@ export const JCardNote: React.FC<JCardNoteProps> = ({
   name,
   creatorName,
   message,
+  imageUrl,
   songs,
   createdAt,
   currentSongIndex = 0,
@@ -44,9 +46,9 @@ export const JCardNote: React.FC<JCardNoteProps> = ({
       <div className="absolute inset-0 bg-[repeating-linear-gradient(transparent_0,transparent_27px,#eae3d2_27px,#eae3d2_28px)] opacity-40 pointer-events-none" />
 
       {/* J-Card Spine / Header */}
-      <div className="relative z-10 bg-amber-100/80 border-b-2 border-dashed border-stone-300 p-2 sm:p-3 flex items-center justify-between">
+      <div className="relative z-10 bg-orange-100/80 border-b-2 border-dashed border-stone-300 p-2 sm:p-3 flex items-center justify-between">
         <div className="flex items-center gap-1.5 sm:gap-2">
-          <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-amber-600" />
+          <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-[#F54900]" />
           <div>
             <span className="text-[8px] sm:text-[10px] font-mono-retro font-bold uppercase tracking-widest text-stone-500">
               CASSETTE INLAY J-CARD
@@ -61,7 +63,7 @@ export const JCardNote: React.FC<JCardNoteProps> = ({
           type="button"
           id="toggle-jcard-btn"
           onClick={() => setIsExpanded(!isExpanded)}
-          className="p-1 rounded-lg hover:bg-amber-200/60 text-stone-600 transition"
+          className="p-1 rounded-lg hover:bg-orange-200/60 text-stone-600 transition"
           title={isExpanded ? 'Collapse notes' : 'Expand notes'}
         >
           {isExpanded ? <ChevronUp className="w-3.5 h-3.5 sm:w-5 sm:h-5" /> : <ChevronDown className="w-3.5 h-3.5 sm:w-5 sm:h-5" />}
@@ -70,11 +72,27 @@ export const JCardNote: React.FC<JCardNoteProps> = ({
 
       {isExpanded && (
         <div className="relative z-10 p-2 sm:p-4 space-y-2 sm:space-y-4">
+          {/* Uploaded Artwork / Photo Insert */}
+          {imageUrl && (
+            <div className="bg-white/95 border border-orange-200/90 rounded-lg sm:rounded-xl p-2 sm:p-2.5 shadow-2xs">
+              <div className="w-full aspect-[16/10] sm:aspect-[16/9] rounded-md overflow-hidden bg-stone-100 border border-stone-200">
+                <img
+                  src={imageUrl}
+                  alt={name ? `${name} Artwork` : 'Mixtape Artwork'}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <span className="text-[9px] sm:text-[10px] font-mono-retro text-stone-500 uppercase tracking-widest block text-center mt-1">
+                Mixtape Artwork
+              </span>
+            </div>
+          )}
+
           {/* Creator's Handwritten Note / Message */}
           {message && (
-            <div className="bg-white/80 border border-amber-200/80 rounded-lg sm:rounded-xl p-2 sm:p-3.5 shadow-xs relative">
+            <div className="bg-white/80 border border-orange-200/80 rounded-lg sm:rounded-xl p-2 sm:p-3.5 shadow-xs relative">
               <div className="flex items-center gap-1.5 mb-1 text-stone-500">
-                <Mail className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-amber-700" />
+                <Mail className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#F54900]" />
                 <span className="text-[8px] sm:text-[10px] font-mono-retro font-bold uppercase tracking-wider">
                   Personal Message
                 </span>
@@ -83,7 +101,7 @@ export const JCardNote: React.FC<JCardNoteProps> = ({
                 "{message}"
               </p>
               {creatorName && (
-                <p className="font-handwriting text-xs sm:text-lg text-amber-900 text-right mt-0.5 sm:mt-1 font-bold">
+                <p className="font-handwriting text-xs sm:text-lg text-[#F54900] text-right mt-0.5 sm:mt-1 font-bold">
                   — {creatorName}
                 </p>
               )}
@@ -94,7 +112,7 @@ export const JCardNote: React.FC<JCardNoteProps> = ({
           <div>
             <div className="flex items-center justify-between mb-1 sm:mb-2">
               <span className="text-[9px] sm:text-[11px] font-mono-retro font-bold uppercase tracking-wider text-stone-600 flex items-center gap-1">
-                <Music className="w-2.5 h-2.5 sm:w-3.5 sm:h-3.5 text-amber-700" />
+                <Music className="w-2.5 h-2.5 sm:w-3.5 sm:h-3.5 text-[#F54900]" />
                 Track List ({songs.length} / 5 songs)
               </span>
               <span className="text-[8px] sm:text-[10px] font-mono-retro text-stone-400 flex items-center gap-1">
@@ -121,7 +139,7 @@ export const JCardNote: React.FC<JCardNoteProps> = ({
                       }}
                       className={`flex items-center justify-between p-1 sm:p-2 rounded-lg sm:rounded-xl transition border text-xs ${
                         isCurrent
-                          ? 'bg-amber-100/90 border-amber-300 text-stone-900 font-semibold shadow-xs'
+                          ? 'bg-orange-100/90 border-orange-300 text-stone-900 font-semibold shadow-xs'
                           : 'bg-white/60 border-stone-200/80 text-stone-700 hover:bg-white hover:border-stone-300'
                       } ${allowSongClick ? 'cursor-pointer' : ''}`}
                     >
@@ -129,7 +147,7 @@ export const JCardNote: React.FC<JCardNoteProps> = ({
                         <span
                           className={`w-4 h-4 sm:w-5 sm:h-5 rounded-md flex items-center justify-center font-mono-retro text-[9px] sm:text-[11px] shrink-0 ${
                             isCurrent
-                              ? 'bg-amber-600 text-white font-bold'
+                              ? 'bg-[#F54900] text-white font-bold'
                               : 'bg-stone-200 text-stone-600'
                           }`}
                         >

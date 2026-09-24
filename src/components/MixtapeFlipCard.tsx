@@ -642,7 +642,7 @@ export const MixtapeFlipCard: React.FC<MixtapeFlipCardProps> = ({
                     <div className="h-1 sm:h-2 bg-stone-800 rounded-full overflow-hidden w-full relative">
                       <div
                         style={{ width: `${progressPercent}%` }}
-                        className="h-full bg-gradient-to-r from-amber-500 to-amber-400 rounded-full transition-all duration-150"
+                        className="h-full bg-gradient-to-r from-[#F54900] to-orange-500 rounded-full transition-all duration-150"
                       />
                     </div>
                     {/* Hover Thumb */}
@@ -707,7 +707,7 @@ export const MixtapeFlipCard: React.FC<MixtapeFlipCardProps> = ({
                       }
                     }}
                     disabled={totalTracks === 0}
-                    className="w-7 h-7 sm:w-11 sm:h-11 rounded-full bg-white hover:bg-stone-100 text-stone-900 shadow-lg active:scale-95 transition flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-amber-400 disabled:opacity-40 disabled:pointer-events-none"
+                    className="w-7 h-7 sm:w-11 sm:h-11 rounded-full bg-white hover:bg-stone-100 text-stone-900 shadow-lg active:scale-95 transition flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-[#F54900] disabled:opacity-40 disabled:pointer-events-none"
                     title={isPlaying ? 'Pause' : 'Play'}
                   >
                     {isPlaying ? (
@@ -807,7 +807,7 @@ export const MixtapeFlipCard: React.FC<MixtapeFlipCardProps> = ({
           onClick={() => triggerFlip('toggle')}
           className="inline-flex items-center gap-1.5 px-3 py-1 bg-stone-200/60 hover:bg-stone-200/90 text-stone-600 rounded-full border border-stone-300/70 transition shadow-2xs cursor-pointer active:scale-95"
         >
-          <RefreshCw className="w-3 h-3 text-amber-700 animate-spin-slow" />
+          <RefreshCw className="w-3 h-3 text-[#F54900] animate-spin-slow" />
           <span>
             {isFlipped || phase === 'back' || phase === 'flipping-to-back'
               ? 'Swipe or click to view cassette'

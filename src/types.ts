@@ -15,7 +15,10 @@ export type CassetteColor =
   | 'matte-black'
   | 'lavender-mist'
   | 'cherry-red'
-  | 'clear-smoke';
+  | 'clear-smoke'
+  | 'pastel-pink'
+  | 'matcha-green'
+  | 'sky-blue';
 
 export type CassettePattern = 
   | 'none'
@@ -29,7 +32,8 @@ export type LabelStyle =
   | 'marker'
   | 'handwritten'
   | 'typewriter'
-  | 'bold-mono';
+  | 'bold-mono'
+  | 'editorial-serif';
 
 export type StickerType = 
   | 'mix-vol-1'
@@ -41,7 +45,11 @@ export type StickerType =
   | 'retro-smile'
   | 'for-you'
   | 'audio-cassette'
-  | 'rainbow';
+  | 'rainbow'
+  | 'stamp-editorial'
+  | 'tape-lines'
+  | 'star'
+  | 'barcode';
 
 export interface StickerItem {
   id: string;
@@ -62,12 +70,14 @@ export interface CassetteCustomization {
 
 export interface Mixtape {
   id: string;
+  ownerId?: string;
   name: string;
   title?: string;
   shareId?: string;
   share_id?: string;
   message?: string;
   creatorName?: string;
+  imageUrl?: string | null;
   customization: CassetteCustomization;
   songs: Song[];
   createdAt: string;
@@ -76,6 +86,7 @@ export interface Mixtape {
 
 export type AppView = 
   | 'landing'
+  | 'account'
   | 'create'
   | 'edit'
   | 'preview'

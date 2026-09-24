@@ -1,0 +1,22 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    // Predictable storage path for artwork:
+    // mixtapes/{mixtapeId}/artwork/{uniqueFileName}
+    match /mixtapes/{mixtapeId}/artwork/{fileName} {
+      // Allow public read so anyone listening to a shared mixtape or J-card can view artwork
+      allow read: if true;
+
+      // Allow write only for authenticated users uploading valid image formats under 10MB
+      allow write: if isSignedIn() &&
+                    request.resource.size < 10 * 1024 * 1024 &&
+                    request.resource.contentType.matches('image/(jpeg|png)');
+
+      allow delete: if isSignedIn();
+    }
+  }
+}

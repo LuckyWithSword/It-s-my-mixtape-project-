@@ -29,15 +29,68 @@ export interface ActiveCloudinaryUpload {
 }
 
 /**
+ * Read Cloudinary environment variables directly via static member access
+ * so Vite statically analyzes and substitutes them during production build.
+ */
+function getEnvConfig(): { cloudName: string; uploadPreset: string } {
+  const envCloudName =
+    (typeof import.meta !== 'undefined' &&
+      import.meta.env &&
+      import.meta.env.VITE_CLOUDINARY_CLOUD_NAME) ||
+    '';
+  const envUploadPreset =
+    (typeof import.meta !== 'undefined' &&
+      import.meta.env &&
+      import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET) ||
+    '';
+
+  return {
+    cloudName: (envCloudName || '').trim(),
+    uploadPreset: (envUploadPreset || '').trim(),
+  };
+}
+
+// Development-only diagnostic logging
+if (typeof import.meta !== 'undefined' && import.meta.env?.DEV) {
+  const env = getEnvConfig();
+  if (!env.cloudName || !env.uploadPreset) {
+    console.info(
+      `[Cloudinary Diagnostic] Cloudinary environment variables are missing in development: ${
+        [!env.cloudName && 'VITE_CLOUDINARY_CLOUD_NAME', !env.uploadPreset && 'VITE_CLOUDINARY_UPLOAD_PRESET']
+          .filter(Boolean)
+          .join(', ')
+      }. Cloud artwork uploads require these build variables.`
+    );
+  }
+}
+
+/**
  * Checks if Cloudinary is configured via environment variables or in-app custom settings.
  */
 export function isCloudinaryConfigured(): boolean {
-  try {
-    const config = getCloudinaryConfig();
-    return Boolean(config.cloudName && config.uploadPreset);
-  } catch {
-    return false;
+  return getOptionalCloudinaryConfig() !== null;
+}
+
+/**
+ * Safely retrieve Cloudinary configuration without throwing an exception.
+ */
+export function getOptionalCloudinaryConfig(): { cloudName: string; uploadPreset: string } | null {
+  const env = getEnvConfig();
+  let cloudName = env.cloudName;
+  let uploadPreset = env.uploadPreset;
+
+  // If not found in environment, check custom localStorage config
+  if (!cloudName || !uploadPreset) {
+    const custom = getCloudinaryCustomConfig();
+    if (!cloudName) cloudName = custom.cloudName;
+    if (!uploadPreset) uploadPreset = custom.uploadPreset;
   }
+
+  if (cloudName && uploadPreset) {
+    return { cloudName, uploadPreset };
+  }
+
+  return null;
 }
 
 /**
@@ -89,30 +142,22 @@ export function clearCloudinaryCustomConfig(): void {
 
 /**
  * Checks if the required Cloudinary environment variables or localStorage values are present.
+ * Throws a descriptive error if missing.
  */
 export function getCloudinaryConfig(): { cloudName: string; uploadPreset: string } {
-  const env = (typeof import.meta !== 'undefined' && (import.meta as any).env) || {};
-  let cloudName = (env.VITE_CLOUDINARY_CLOUD_NAME || '').trim();
-  let uploadPreset = (env.VITE_CLOUDINARY_UPLOAD_PRESET || '').trim();
-
-  // If not in env, check custom storage config
-  if (!cloudName || !uploadPreset) {
-    const custom = getCloudinaryCustomConfig();
-    if (!cloudName) cloudName = custom.cloudName;
-    if (!uploadPreset) uploadPreset = custom.uploadPreset;
+  const config = getOptionalCloudinaryConfig();
+  if (config) {
+    return config;
   }
 
-  if (!cloudName || !uploadPreset) {
-    const missing: string[] = [];
-    if (!cloudName) missing.push('VITE_CLOUDINARY_CLOUD_NAME');
-    if (!uploadPreset) missing.push('VITE_CLOUDINARY_UPLOAD_PRESET');
+  const env = getEnvConfig();
+  const missing: string[] = [];
+  if (!env.cloudName) missing.push('VITE_CLOUDINARY_CLOUD_NAME');
+  if (!env.uploadPreset) missing.push('VITE_CLOUDINARY_UPLOAD_PRESET');
 
-    throw new Error(
-      `Cloudinary configuration missing: ${missing.join(', ')}. Please set them in your environment or in the Cloudinary settings modal to enable cloud artwork uploads.`
-    );
-  }
-
-  return { cloudName, uploadPreset };
+  throw new Error(
+    `Cloudinary configuration missing: ${missing.join(', ')}. Please set them in your Netlify site environment variables to enable cloud artwork uploads.`
+  );
 }
 
 /**
@@ -356,8 +401,9 @@ export function uploadArtworkToServer(
 
 /**
  * Upload artwork: Prioritizes direct Cloudinary browser upload when configured;
- * seamlessly uses server fallback when Cloudinary environment variables have not been configured,
- * guaranteeing the mixtape save operation is NEVER broken.
+ * seamlessly uses server fallback when running on a local development server with Express backend.
+ * On static production hosting (such as Netlify), rejects with a clear actionable message
+ * without causing unhandled exceptions.
  */
 export function uploadArtwork(
   blob: Blob,
@@ -365,10 +411,24 @@ export function uploadArtwork(
 ): ActiveCloudinaryUpload {
   if (isCloudinaryConfigured()) {
     return uploadImageToCloudinaryDirect(blob, onProgress);
-  } else {
-    console.info('[ARTWORK] Cloudinary credentials not configured; saving via server artwork storage.');
+  }
+
+  // If running locally in development with Node/Express backend, server upload can be attempted
+  if (
+    typeof window !== 'undefined' &&
+    (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+  ) {
+    console.info('[ARTWORK] Cloudinary credentials not configured; attempting local server upload.');
     return uploadArtworkToServer(blob, onProgress);
   }
+
+  // On static production hosts (such as Netlify), server storage is not available
+  const missingMsg =
+    'Cloudinary is not configured. Please define VITE_CLOUDINARY_CLOUD_NAME and VITE_CLOUDINARY_UPLOAD_PRESET in your Netlify site settings to upload custom artwork.';
+  return {
+    promise: Promise.reject(new Error(missingMsg)),
+    cancel: () => {},
+  };
 }
 
 /**

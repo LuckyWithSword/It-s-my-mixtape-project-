@@ -1,6 +1,6 @@
 import { initializeApp, getApps, getApp } from 'firebase/app';
 import { getAuth, GoogleAuthProvider } from 'firebase/auth';
-import { getFirestore, doc, getDocFromServer } from 'firebase/firestore';
+import { initializeFirestore, getFirestore, doc, getDocFromServer } from 'firebase/firestore';
 import appletConfig from '../../firebase-applet-config.json';
 
 // Use the provisioned applet configuration from firebase-applet-config.json as primary,
@@ -25,8 +25,23 @@ export const app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfi
 // Initialize Firebase Authentication
 export const auth = getAuth(app);
 
-// Initialize Cloud Firestore with specified database ID
-export const db = databaseId ? getFirestore(app, databaseId) : getFirestore(app);
+// Initialize Cloud Firestore with specified database ID and forced long-polling.
+// (Long polling prevents the WebChannel streaming 10-second backend timeout in reverse-proxy & sandbox iframe environments)
+function createFirestoreInstance() {
+  try {
+    return initializeFirestore(
+      app,
+      {
+        experimentalForceLongPolling: true,
+      },
+      databaseId
+    );
+  } catch {
+    return databaseId ? getFirestore(app, databaseId) : getFirestore(app);
+  }
+}
+
+export const db = createFirestoreInstance();
 
 // Google Auth Provider
 export const googleProvider = new GoogleAuthProvider();

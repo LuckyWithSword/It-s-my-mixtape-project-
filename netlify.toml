@@ -1,0 +1,37 @@
+[build]
+  publish = "dist"
+  command = "npm run build"
+
+# Serve Digital Asset Links directly without SPA redirection
+[[redirects]]
+  from = "/.well-known/*"
+  to = "/.well-known/:splat"
+  status = 200
+
+# Serve SPA routes through index.html
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Headers for Digital Asset Links verification
+[[headers]]
+  for = "/.well-known/assetlinks.json"
+  [headers.values]
+    Content-Type = "application/json"
+    Access-Control-Allow-Origin = "*"
+    Cache-Control = "public, max-age=3600"
+
+# Headers for Web App Manifest
+[[headers]]
+  for = "/manifest.webmanifest"
+  [headers.values]
+    Content-Type = "application/manifest+json"
+    Access-Control-Allow-Origin = "*"
+
+# Headers for Service Worker
+[[headers]]
+  for = "/sw.js"
+  [headers.values]
+    Content-Type = "application/javascript"
+    Cache-Control = "public, max-age=0, must-revalidate"

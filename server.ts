@@ -1,9 +1,11 @@
 import express from 'express';
+import http from 'http';
 import path from 'path';
 import fs from 'fs';
 import { createServer as createViteServer } from 'vite';
 
 const app = express();
+const server = http.createServer(app);
 const PORT = 3000;
 
 app.use(express.json({ limit: '15mb' }));
@@ -22,6 +24,20 @@ app.use('/uploads', express.static(uploadsDir, {
 // Health check
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok' });
+});
+
+// Explicit Digital Asset Links handler with correct application/json MIME type
+app.get('/.well-known/assetlinks.json', (req, res, next) => {
+  res.setHeader('Content-Type', 'application/json');
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  const distAssetLinks = path.join(process.cwd(), 'dist', '.well-known', 'assetlinks.json');
+  const publicAssetLinks = path.join(process.cwd(), 'public', '.well-known', 'assetlinks.json');
+  if (fs.existsSync(distAssetLinks)) {
+    return res.sendFile(distAssetLinks);
+  } else if (fs.existsSync(publicAssetLinks)) {
+    return res.sendFile(publicAssetLinks);
+  }
+  next();
 });
 
 // Explicit manifest handlers for both webmanifest and json formats with correct MIME type
@@ -123,8 +139,12 @@ app.get('/api/youtube-meta', async (req, res) => {
 // --- VITE MIDDLEWARE & SPA FALLBACK ---
 async function startServer() {
   if (process.env.NODE_ENV !== 'production') {
+    const isHmrDisabled = process.env.DISABLE_HMR === 'true';
     const vite = await createViteServer({
-      server: { middlewareMode: true },
+      server: {
+        middlewareMode: true,
+        hmr: isHmrDisabled ? false : { server },
+      },
       appType: 'spa',
     });
     app.use(vite.middlewares);
@@ -136,7 +156,7 @@ async function startServer() {
     });
   }
 
-  app.listen(PORT, '0.0.0.0', () => {
+  server.listen(PORT, '0.0.0.0', () => {
     console.log(`Server running on http://0.0.0.0:${PORT}`);
   });
 }
